@@ -498,5 +498,5 @@ void CreateUserAccount(LinkList AccList)//这波插入的是尾节点
 }
 void DeleteUserAccount(LinkList AccList)
 {
-
+	cout << "请输入要删除的账号" << endl;
 }
