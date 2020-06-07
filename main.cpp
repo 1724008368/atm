@@ -44,6 +44,8 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount);
 void ReadFromFile(DoubleLinkList AccList);
 void SaveToFile(LinkList AccList);
 void AdministratorInterface(DoubleLinkList AccList);
+void CreateUserAccount(LinkList AccList);
+void DeleteUserAccount(LinkList AccList);
 int main()
 {
 	DoubleLinkList AccList = CreateList();
@@ -464,10 +466,10 @@ void AdministratorInterface(DoubleLinkList AccList)
 	int n;
 	while (cin>>n) {
 		if (n == 1) {
-
+			CreateUserAccount(AccList.second);
 		}
 		else if (n == 2) {
-
+			DeleteUserAccount(AccList.first);
 		}
 		else if (n == 3) {
 
@@ -482,4 +484,19 @@ void AdministratorInterface(DoubleLinkList AccList)
 
 		}
 	}
+}
+void CreateUserAccount(LinkList AccList)//这波插入的是尾节点
+{
+	cout << "请依次输入 账号 密码 姓名 性别(01表示) 手机号 存款" << endl;
+	LinkList t = new ListNode;
+	cin >> t->date;
+	t->next = AccList;
+	t->prev = AccList->prev;
+	AccList->prev->next = t;
+	AccList->prev = t;
+	cout << "创建成功" << endl;
+}
+void DeleteUserAccount(LinkList AccList)
+{
+
 }
