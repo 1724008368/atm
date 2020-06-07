@@ -5,7 +5,20 @@
 #include<algorithm>
 #include<map>
 #include<iomanip>
+#include <locale>
 #include <windows.h>
+/*实现按中文拼音比较*/
+
+#ifdef _MSC_VER
+static const char* ZH_CN_LOCALE_STRING = "Chinese_china";
+#else
+static const char* ZH_CN_LOCALE_STRING = "zh_CN.utf8";
+#endif
+static const std::locale zh_CN_locale = std::locale(ZH_CN_LOCALE_STRING);
+static const std::collate<char>& zh_CN_collate = std::use_facet<std::collate<char> >(zh_CN_locale);
+
+/******************/
+
 //管理员账号密码
 std::string AdministratorAccount = "root";
 std::string AdministratorPassword = "root";
@@ -46,6 +59,13 @@ void SaveToFile(LinkList AccList);
 void AdministratorInterface(DoubleLinkList AccList);
 void CreateUserAccount(LinkList AccList);
 void DeleteUserAccount(LinkList AccList);
+void ShowAllUsersInformation(LinkList AccList);
+void UsersAccountDown(LinkList AccList);//排序算法均使用选择排序
+void UsersAccountUp(LinkList AccList);
+void UsersDepositDown(LinkList AccList);
+void UsersDepositUp(LinkList AccList);
+void UsersNameDown(LinkList AccList);
+void UsersNameUp(LinkList AccList);
 int main()
 {
 	DoubleLinkList AccList = CreateList();
@@ -434,6 +454,8 @@ void AdministratorInterface(DoubleLinkList AccList)
 			std::cout << "账号错误,请重新输入" << std::endl;
 			continue;
 		}
+		std::cout << "请输入密码" << std::endl;
+
 		char ch;
 		while (ch = _getch(), ch != '\r')
 		{
@@ -462,9 +484,11 @@ void AdministratorInterface(DoubleLinkList AccList)
 		}
 		//std::cout << TemAccount << std::endl << TemPassword << std::endl;
 	}
-	cout << "[1] 创建用户账户\n" << "[2] 删除用户账户\n" << "[3] 查看全部用户信息\n" << "[4] 查找用户信息\n" << "[5] 修改用户信息\n" << "[6] 退出" << endl;
+
 	int n;
-	while (cin>>n) {
+	while (true) {
+		cout << "[1] 创建用户账户\n" << "[2] 删除用户账户\n" << "[3] 查看全部用户信息\n" << "[4] 查找用户信息\n" << "[5] 修改用户信息\n" << "[6] 退出" << endl;
+		cin >> n;
 		if (n == 1) {
 			CreateUserAccount(AccList.second);
 		}
@@ -472,7 +496,7 @@ void AdministratorInterface(DoubleLinkList AccList)
 			DeleteUserAccount(AccList.first);
 		}
 		else if (n == 3) {
-
+			ShowAllUsersInformation(AccList.first);
 		}
 		else if (n == 4) {
 
@@ -498,5 +522,153 @@ void CreateUserAccount(LinkList AccList)//这波插入的是尾节点
 }
 void DeleteUserAccount(LinkList AccList)
 {
-	cout << "请输入要删除的账号" << endl;
+	
+	string TemAccount = "";
+	while (true)
+	{
+		cout << "请输入要删除的账号" << endl;
+		cin >> TemAccount;
+		if (CheckAccount(AccList, TemAccount) == false) {
+			cout << "账号不存在,请重新输入" << endl;
+		}
+		else {
+			break;
+		}
+	}
+	LinkList p = AccList->next;
+	while (p->next != nullptr) {
+		if ((p->date).GetMyAccount() == TemAccount) {
+			break;
+		}
+		p = p->next;
+	}
+	p->prev->next = p->next;
+	p->next->prev = p->prev;
+	delete p;
+	cout << "账号: " << TemAccount << " 已删除" << endl;
+
+}
+void ShowAllUsersInformation(LinkList AccList)
+{
+	int n;
+	cout << "请选择您需要的展示方式" << endl;
+	cout << "[1] 按账号降序排序" << endl;
+	cout << "[2] 按账号升序排序" << endl;
+	cout << "[3] 按存款降序排序" << endl;
+	cout << "[4] 按存款升序排序" << endl;
+	cout << "[5] 按姓名降序排序" << endl;
+	cout << "[6] 按姓名升序排序" << endl;
+	cin >> n;
+	if (n == 1) {
+		UsersAccountDown(AccList);
+	}
+	else if (n == 2) {
+		UsersAccountUp(AccList);
+	}
+	else if (n == 3) {
+		UsersDepositDown(AccList);
+	}
+	else if (n == 4) {
+		UsersDepositUp(AccList);
+	}
+	else if (n == 5) {
+		UsersNameDown(AccList);
+	}
+	else if (n == 6) {
+		UsersNameUp(AccList);
+	}
+	LinkList p = AccList->next;
+	cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+	while (p->next != nullptr) {
+		cout << p->date;
+		p = p->next;
+	}
+}
+void UsersAccountDown(LinkList AccList)
+{
+	LinkList i = nullptr;
+	LinkList j = nullptr;
+	for (i = AccList->next; i->next != nullptr; i = i->next) {
+		for (j = i->next; j->next != nullptr; j = j->next) {
+			if ((j->date).GetMyAccount() > (i->date).GetMyAccount()) {
+				std::swap(i->date, j->date);
+			}
+				
+		}
+	}
+}
+void UsersAccountUp(LinkList AccList)
+{
+	LinkList i = nullptr;
+	LinkList j = nullptr;
+	for (i = AccList->next; i->next != nullptr; i = i->next) {
+		for (j = i->next; j->next != nullptr; j = j->next) {
+			if ((j->date).GetMyAccount() < (i->date).GetMyAccount()) {
+				std::swap(i->date, j->date);
+			}
+
+		}
+	}
+}
+void UsersDepositDown(LinkList AccList)
+{
+	LinkList i = nullptr;
+	LinkList j = nullptr;
+	for (i = AccList->next; i->next != nullptr; i = i->next) {
+		for (j = i->next; j->next != nullptr; j = j->next) {
+			if ((j->date).GetMyDeposit() > (i->date).GetMyDeposit()) {
+				std::swap(i->date, j->date);
+			}
+
+		}
+	}
+}
+void UsersDepositUp(LinkList AccList)
+{
+	LinkList i = nullptr;
+	LinkList j = nullptr;
+	for (i = AccList->next; i->next != nullptr; i = i->next) {
+		for (j = i->next; j->next != nullptr; j = j->next) {
+			if ((j->date).GetMyDeposit() < (i->date).GetMyDeposit()) {
+				std::swap(i->date, j->date);
+			}
+
+		}
+	}
+}
+void UsersNameDown(LinkList AccList)
+{
+	LinkList i = nullptr;
+	LinkList j = nullptr;
+	for (i = AccList->next; i->next != nullptr; i = i->next) {
+		for (j = i->next; j->next != nullptr; j = j->next) {
+			char* s1 = new char[30];
+			char* s2 = new char[30];
+			strcpy(s1, (i->date).GetMyName().c_str());
+			strcpy(s2, (j->date).GetMyName().c_str());
+			if (zh_CN_collate.compare(s1,s1+ (i->date).GetMyName().size(), s2, s2 + (j->date).GetMyName().size())<0) {
+				std::swap(i->date, j->date);
+			}
+			delete[]s1;
+			delete[]s2;
+		}
+	}
+}
+void UsersNameUp(LinkList AccList)
+{
+	LinkList i = nullptr;
+	LinkList j = nullptr;
+	for (i = AccList->next; i->next != nullptr; i = i->next) {
+		for (j = i->next; j->next != nullptr; j = j->next) {
+			char* s1 = new char[30];
+			char* s2 = new char[30];
+			strcpy(s1, (i->date).GetMyName().c_str());
+			strcpy(s2, (j->date).GetMyName().c_str());
+			if (zh_CN_collate.compare(s1, s1 + (i->date).GetMyName().size(), s2, s2 + (j->date).GetMyName().size()) > 0) {
+				std::swap(i->date, j->date);
+			}
+			delete[]s1;
+			delete[]s2;
+		}
+	}
 }

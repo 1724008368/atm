@@ -2,6 +2,7 @@
 #include<string>
 #include<iostream>
 #include<fstream>
+#include<iomanip>
 class BaseUser
 {
 protected://成员变量

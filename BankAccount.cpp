@@ -92,3 +92,11 @@ std::ofstream& operator<<(std::ofstream& o, BankAccount& tem)
 	return o;
 }
 /*******ofstream写入结束*******/
+
+/*******cout输出开始*******/
+std::ostream& operator<<(std::ostream& o, BankAccount& tem)
+{
+	o << std::left << std::setw(15) << tem.MyAccount << std::left << std::setw(15) << tem.MyPassword << std::left << std::setw(15) << tem.MyName << std::left << std::setw(15) << ((tem.MyGender==1)?"男":"女") << std::left << std::setw(15) << tem.MyTel << std::left << std::setw(15) << tem.MyDeposit << std::endl;
+	return o;
+}
+/*******cout输出结束*******/

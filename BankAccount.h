@@ -49,6 +49,10 @@ public://成员函数
 	/***ofstream写入***/
 	/***按顺序向文件写入账号密码姓名性别(01表示)手机号存款***/
 	friend std::ofstream& operator<<(std::ofstream& o, BankAccount& tem);
+
+	/***cout输出***/
+	/***按顺序读入账号密码姓名存款性别(01表示)手机号***/
+	friend std::ostream& operator<<(std::ostream& o, BankAccount& tem);
 };
 
 
