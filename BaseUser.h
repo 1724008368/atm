@@ -21,6 +21,9 @@ public://成员函数
 	/***修改密码***/
 	void SetPassword(const std::string& NewPassword);
 
+	/***修改姓名***/
+	void SetName(const std::string& NewName);
+
 	/***获得成员变量MyAccount值***/
 	std::string GetMyAccount();
 

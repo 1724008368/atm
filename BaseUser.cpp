@@ -19,6 +19,13 @@ void BaseUser::SetPassword(const std::string& NewPassword)
 }
 /*******SetPassword函数结束*******/
 
+/*******SetName函数开始*******/
+void BaseUser::SetName(const std::string& NewName)
+{
+	MyName = NewName;
+}
+/*******SetName函数结束*******/
+
 /*******GetMyAccount函数开始*******/
 std::string BaseUser::GetMyAccount()
 {
