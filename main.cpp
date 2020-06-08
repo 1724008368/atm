@@ -50,15 +50,17 @@ void Exit();
 void UserInterface(DoubleLinkList AccList);
 bool CheckAccount(LinkList AccList, const std::string& InAccount);
 bool CheckPassword(LinkList AccList, const std::string& InAccount, const std::string& InPassword);
+bool CheckAccountName(LinkList AccList, const std::string& InAccount, const std::string& InName);
 void MapInitialization(LinkList AccList, std::map<std::string, int>& TemWrongPassword);
 void QueryPrintDeposit(LinkList AccList, const std::string& InAccount);
 void TakeInDeposit(LinkList AccList, const std::string& InAccount);
 void TakeOutDeposit(LinkList AccList, const std::string& InAccount);
 void GiveOtherDeposit(LinkList AccList, const std::string& InAccount);
+void UserChangePassword(LinkList AccList, const std::string& InAccount);
 void ReadFromFile(DoubleLinkList AccList);
 void SaveToFile(LinkList AccList);
 void AdministratorInterface(DoubleLinkList AccList);
-void CreateUserAccount(LinkList AccList);
+void CreateUserAccount(DoubleLinkList AccList);
 void DeleteUserAccount(LinkList AccList);
 void ShowAllUsersInformation(LinkList AccList);
 void UsersAccountDown(LinkList AccList);//排序算法均使用选择排序
@@ -81,6 +83,7 @@ void SearchAsSurname(LinkList AccList);
 void SearchAsKeyWord(LinkList AccList);
 void SearchAsTelTopThree(LinkList AccList);
 void SearchAsTelLastFour(LinkList AccList);
+void StatisticalInformation(LinkList AccList);
 
 int main()
 {
@@ -189,7 +192,7 @@ void UserInterface(DoubleLinkList AccList)
 	}
 	
 	while (true) {
-		std::cout << "请选择相应的按钮,按回车键结束\n" << "[1]查询余额\n" << "[2]存款\n" << "[3]取款\n" << "[4]转账\n" << "[5]退卡\n" << std::endl;
+		std::cout << "请选择相应的按钮,按回车键结束\n" << "[1] 查询余额\n" << "[2] 存款\n" << "[3] 取款\n" << "[4] 转账\n" <<"[5] 修改密码\n"<< "[6] 退卡\n" << std::endl;
 		int n;
 		std::cin >> n;
 		if (n == 1) {
@@ -197,14 +200,21 @@ void UserInterface(DoubleLinkList AccList)
 		}
 		else if (n == 2) {
 			TakeInDeposit(AccList.first, TemAccount);
+			SaveToFile(AccList.first);
 		}
 		else if (n == 3) {
 			TakeOutDeposit(AccList.first, TemAccount);
+			SaveToFile(AccList.first);
 		}
 		else if (n == 4) {
 			GiveOtherDeposit(AccList.first, TemAccount);
+			SaveToFile(AccList.first);
 		}
 		else if (n == 5) {
+			UserChangePassword(AccList.first, TemAccount);
+			SaveToFile(AccList.first);
+		}
+		else if (n == 6) {
 			Exit();
 			return;
 		}
@@ -232,6 +242,18 @@ bool CheckPassword(LinkList AccList, const std::string& InAccount, const std::st
 	}
 	return false;
 }
+
+bool CheckAccountName(LinkList AccList, const std::string& InAccount, const std::string& InName)
+{
+	LinkList Temp = AccList->next;
+	while (Temp->next != nullptr) {//未到达尾节点
+		if ((Temp->date).GetMyAccount() == InAccount && (Temp->date).GetMyName() == InName)//找到了此账号同时密码正确
+			return true;
+		Temp = Temp->next;
+	}
+	return false;
+}
+
 void MapInitialization(LinkList AccList, std::map<std::string, int>& TemWrongPassword)
 {
 	LinkList p = AccList->next;
@@ -274,7 +296,7 @@ void TakeInDeposit(LinkList AccList, const std::string& InAccount)
 		p = p->next;
 
 	}
-	SaveToFile(AccList);
+	//SaveToFile(AccList);
 	std::cout << "是否打印凭条\t\t[1]是\t[2]否" << std::endl;
 	int n;
 	std::cin >> n;
@@ -335,7 +357,7 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 
 	}
 
-	SaveToFile(AccList);
+	//SaveToFile(AccList);
 
 	cout << "是否打印凭条\t\t[1]是\t[2]否" << endl;
 	cin >> n;
@@ -359,7 +381,7 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 }
 void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 {
-	string TurnOutAccount = "";
+	string TurnOutAccount = "", TurnOutName = "";
 	while (true) {
 
 		cout << "请输入转账账号" << endl;
@@ -375,6 +397,15 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 			break;
 		}
 	}
+
+	cout << "请输入转账人姓名" << endl;
+	cin >> TurnOutName;
+	if (CheckAccountName(AccList, TurnOutAccount, TurnOutName) == false) {
+		cout << "账号和姓名不匹配" << endl;
+		return;
+	}
+
+
 
 	int n;
 	int money = 0;
@@ -422,7 +453,7 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 		p = p->next;
 	}
 
-	SaveToFile(AccList);
+	//SaveToFile(AccList);
 
 	cout << "是否打印凭条\t\t[1]是\t[2]否" << endl;
 	cin >> n;
@@ -502,10 +533,10 @@ void AdministratorInterface(DoubleLinkList AccList)
 
 	int n;
 	while (true) {
-		cout << "[1] 创建用户账户\n" << "[2] 删除用户账户\n" << "[3] 查看全部用户信息\n" << "[4] 查找用户信息\n" << "[5] 修改用户信息\n" << "[6] 单条件查找\n"<<"[7] 模糊查找\n"<<"[8] 退出" << endl;
+		cout << "[1] 创建用户账户\n" << "[2] 删除用户账户\n" << "[3] 查看全部用户信息\n" << "[4] 查找用户信息\n" << "[5] 修改用户信息\n" << "[6] 单条件查找\n"<<"[7] 模糊查找\n"<<"[8] 统计信息\n"<<"[9] 退出" << endl;
 		cin >> n;
 		if (n == 1) {
-			CreateUserAccount(AccList.second);
+			CreateUserAccount(AccList);
 			SaveToFile(AccList.first);
 		}
 		else if (n == 2) {
@@ -529,20 +560,28 @@ void AdministratorInterface(DoubleLinkList AccList)
 			FuzzySearch(AccList.first);
 		}
 		else if (n == 8) {
+			StatisticalInformation(AccList.first);
+		}
+		else if (n == 9) {
 			Exit();
 			return;
 		}
 	}
 }
-void CreateUserAccount(LinkList AccList)//这波插入的是尾节点
+void CreateUserAccount(DoubleLinkList AccList)//传入的是头尾指针
 {
 	cout << "请依次输入 账号 密码 姓名 性别(01表示) 手机号" << endl;
 	LinkList t = new ListNode;
 	cin >> t->date;
-	t->next = AccList;
-	t->prev = AccList->prev;
-	AccList->prev->next = t;
-	AccList->prev = t;
+	if (CheckAccount(AccList.first, (t->date).GetMyAccount()) == true) {
+		cout << "该账号已存在,创建失败" << endl;
+		delete t;
+		return;
+	}
+	t->next = AccList.second;
+	t->prev = AccList.second->prev;
+	AccList.second->prev->next = t;
+	AccList.second->prev = t;
 	cout << "创建成功" << endl;
 	
 }
@@ -1088,5 +1127,113 @@ void SearchAsTelLastFour(LinkList AccList)
 	}
 	if (IsFind == false) {
 		cout << "未找到相关数据" << endl;
+	}
+}
+void StatisticalInformation(LinkList AccList)
+{
+	cout << "呐呐呐银行用户数: " << BankAccount::NumBankAccount - 2 << endl;
+	double SumDeposit = 0;
+	int Mr = 0, Mrs = 0;
+	LinkList p = AccList->next;
+	while (p->next != nullptr) {
+		if ((p->date).GetMyGender() == 1) {
+			Mr++;
+		}
+		else {
+			Mrs++;
+		}
+		p = p->next;
+	}
+
+	cout << "男性 : " << Mr << " 位  " << "女性 : " << Mrs << " 位" << endl;
+
+	p = AccList->next;
+	while (p->next!=nullptr) {
+		SumDeposit += (p->date).GetMyDeposit();
+		p = p->next;
+	}
+	cout << "呐呐呐银行总存款数: " << std::fixed << std::setprecision(2) << SumDeposit << endl;
+
+}
+
+void UserChangePassword(LinkList AccList, const std::string& InAccount)
+{
+	string TemPassword="", NewPassword="",SureNewPassword="";
+	cout << "请输入原密码" << endl;
+
+	char ch;
+	while (ch = _getch(), ch != '\r') {
+		if (ch == '\b') {
+			if (TemPassword.size()) {
+				putchar('\b');
+				putchar(' ');
+				putchar('\b');
+			}
+			if (TemPassword.size())
+				TemPassword.erase(TemPassword.size() - 1, 1);
+
+		}
+		else {
+			TemPassword = TemPassword + ch;
+			putchar('*');
+		}
+	}
+
+	if (CheckPassword(AccList, InAccount, TemPassword)==false) {
+		cout << "密码错误" << endl;
+		return;
+	}
+	
+	cout << "请输入新密码" << endl;
+	while (ch = _getch(), ch != '\r') {
+		if (ch == '\b') {
+			if (NewPassword.size()) {
+				putchar('\b');
+				putchar(' ');
+				putchar('\b');
+			}
+			if (NewPassword.size())
+				NewPassword.erase(NewPassword.size() - 1, 1);
+
+		}
+		else {
+			NewPassword = NewPassword + ch;
+			putchar('*');
+		}
+	}
+
+	cout << "请再次输入新密码" << endl;
+
+	while (ch = _getch(), ch != '\r') {
+		if (ch == '\b') {
+			if (SureNewPassword.size()) {
+				putchar('\b');
+				putchar(' ');
+				putchar('\b');
+			}
+			if (SureNewPassword.size())
+				SureNewPassword.erase(SureNewPassword.size() - 1, 1);
+
+		}
+		else {
+			SureNewPassword = SureNewPassword + ch;
+			putchar('*');
+		}
+	}
+	
+	if (SureNewPassword == NewPassword) {
+		LinkList p = AccList->next;
+		while (p->next != nullptr) {
+			if ((p->date).GetMyAccount() == InAccount) {
+				(p->date).SetPassword(NewPassword);
+				cout << "密码修改成功" << endl;
+				return;
+			}
+			p = p->next;
+		}
+	}
+	else {
+		cout << "两次输入密码不一致" << endl;
+		return;
 	}
 }
