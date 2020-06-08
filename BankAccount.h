@@ -1,5 +1,23 @@
 #pragma once
 #include "BaseUser.h"
+struct NumDepositChangeNode
+{
+	double Money;
+	double CurrentDeposit;
+	std::string Time = "";
+	NumDepositChangeNode(double TheMoney=0,double TheCurrentDeposit=0);
+};
+
+struct NumDepositInOutNode
+{
+	double Money;
+	double CurrentDeposit;
+	std::string OtherAccount = "";
+	std::string Time = "";
+	NumDepositInOutNode(double TheMoney=0, double TheCurrentDeposit=0, std::string TheOtherAccount="");
+	
+};
+
 class BankAccount :
 	public BaseUser
 {
@@ -7,6 +25,12 @@ private://成员变量
 	int MyGender;
 	long long MyTel;
 	double MyDeposit;
+public://为操作vector方便,声明为public
+	int NumDepositChange = 0;//声明初始化
+	int NumDepositInOut = 0;
+	std::vector<NumDepositChangeNode> DepositChangeData;
+	std::vector<NumDepositInOutNode> DepositInOutData;
+
 public:
 	static int NumBankAccount;
 public://成员函数

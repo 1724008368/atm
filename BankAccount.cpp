@@ -79,7 +79,7 @@ std::istream& operator>>(std::istream& i, BankAccount& tem)
 /*******ifstream读入开始*******/
 std::ifstream& operator>>(std::ifstream& i, BankAccount& tem)
 {
-	i >> tem.MyAccount >> tem.MyPassword >> tem.MyName >> tem.MyGender >> tem.MyTel >> tem.MyDeposit;
+	i >> tem.MyAccount >> tem.MyPassword >> tem.MyName >> tem.MyGender >> tem.MyTel >> tem.MyDeposit>> tem.NumDepositChange>> tem.NumDepositInOut;
 	i.ignore();
 	return i;
 }
@@ -88,7 +88,7 @@ std::ifstream& operator>>(std::ifstream& i, BankAccount& tem)
 /*******ofstream写入开始*******/
 std::ofstream& operator<<(std::ofstream& o, BankAccount& tem)
 {
-	o << tem.MyAccount << " " << tem.MyPassword << " " << tem.MyName << " " << tem.MyGender << " " << tem.MyTel << " " << tem.MyDeposit << std::endl;
+	o << tem.MyAccount << " " << tem.MyPassword << " " << tem.MyName << " " << tem.MyGender << " " << tem.MyTel << " " << tem.MyDeposit <<" "<<tem.NumDepositChange << " " << tem.NumDepositInOut << std::endl;
 	return o;
 }
 /*******ofstream写入结束*******/
@@ -100,3 +100,15 @@ std::ostream& operator<<(std::ostream& o, BankAccount& tem)
 	return o;
 }
 /*******cout输出结束*******/
+
+/*******存取款信息结构构造函数开始*******/
+NumDepositChangeNode::NumDepositChangeNode(double TheMoney, double TheCurrentDeposit):Money(TheMoney), CurrentDeposit(TheCurrentDeposit)
+{
+
+}
+/*******存取款信息结构构造函数结束*******/
+
+NumDepositInOutNode::NumDepositInOutNode(double TheMoney, double TheCurrentDeposit, std::string TheOtherAccount) :Money(TheMoney), CurrentDeposit(TheCurrentDeposit), OtherAccount(TheOtherAccount)
+{
+
+}

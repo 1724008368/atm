@@ -3,6 +3,7 @@
 #include<iostream>
 #include<fstream>
 #include<iomanip>
+#include<vector>
 class BaseUser
 {
 protected://成员变量
