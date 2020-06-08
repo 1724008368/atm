@@ -1,19 +1,23 @@
 #pragma once
 #include "BaseUser.h"
-struct NumDepositChangeNode
+struct NumDepositChangeNode//存放存取款信息
 {
-	double Money;
+	double Money;//为正代表存款记录,为负代表取款记录
 	double CurrentDeposit;
 	std::string Time = "";
+	/***构造函数初始化成员变量***/
+	//设置函数默认值原因是为了让vector创建对象
 	NumDepositChangeNode(double TheMoney=0,double TheCurrentDeposit=0);
 };
 
-struct NumDepositInOutNode
+struct NumDepositInOutNode//存放转账信息
 {
-	double Money;
+	double Money;//为正代表转入,为负代表转出
 	double CurrentDeposit;
-	std::string OtherAccount = "";
+	std::string OtherAccount ;
 	std::string Time = "";
+	/***构造函数初始化成员变量***/
+	//设置函数默认值原因是为了让vector创建对象
 	NumDepositInOutNode(double TheMoney=0, double TheCurrentDeposit=0, std::string TheOtherAccount="");
 	
 };

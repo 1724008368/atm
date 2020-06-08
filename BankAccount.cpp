@@ -108,7 +108,9 @@ NumDepositChangeNode::NumDepositChangeNode(double TheMoney, double TheCurrentDep
 }
 /*******存取款信息结构构造函数结束*******/
 
+/*******转账信息结构构造函数开始*******/
 NumDepositInOutNode::NumDepositInOutNode(double TheMoney, double TheCurrentDeposit, std::string TheOtherAccount) :Money(TheMoney), CurrentDeposit(TheCurrentDeposit), OtherAccount(TheOtherAccount)
 {
 
 }
+/*******存取款信息结构构造函数结束*******/
