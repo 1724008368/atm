@@ -88,7 +88,15 @@ std::ifstream& operator>>(std::ifstream& i, BankAccount& tem)
 /*******ofstream写入开始*******/
 std::ofstream& operator<<(std::ofstream& o, BankAccount& tem)
 {
-	o << tem.MyAccount << " " << tem.MyPassword << " " << tem.MyName << " " << tem.MyGender << " " << tem.MyTel << " " << tem.MyDeposit <<" "<<tem.NumDepositChange << " " << tem.NumDepositInOut << std::endl;
+	o << tem.MyAccount << " "
+		<< tem.MyPassword << " "
+		<< tem.MyName << " " 
+		<< tem.MyGender << " "
+		<< tem.MyTel << " " 
+		<< tem.MyDeposit <<" "
+		<<tem.NumDepositChange << " " 
+		<< tem.NumDepositInOut << 
+		std::endl;
 	return o;
 }
 /*******ofstream写入结束*******/
@@ -96,7 +104,13 @@ std::ofstream& operator<<(std::ofstream& o, BankAccount& tem)
 /*******cout输出开始*******/
 std::ostream& operator<<(std::ostream& o, BankAccount& tem)
 {
-	o << std::left << std::setw(15) << tem.MyAccount << std::left << std::setw(15) << tem.MyPassword << std::left << std::setw(15) << tem.MyName << std::left << std::setw(15) << ((tem.MyGender==1)?"男":"女") << std::left << std::setw(15) << tem.MyTel << std::left << std::fixed<<std::setprecision(2)<<std::setw(15) << tem.MyDeposit << std::endl;
+	o << std::left << std::setw(15) << tem.MyAccount
+		<< std::left << std::setw(15) << tem.MyPassword
+		<< std::left << std::setw(15) << tem.MyName 
+		<< std::left << std::setw(15) << ((tem.MyGender==1)?"男":"女")
+		<< std::left << std::setw(15) << tem.MyTel
+		<< std::left << std::fixed<<std::setprecision(2)<<std::setw(15) << tem.MyDeposit 
+		<< std::endl;
 	return o;
 }
 /*******cout输出结束*******/

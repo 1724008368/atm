@@ -209,12 +209,15 @@ int main()
 	ReadFromFile3(AccList);
 	while (int t = Welcome()) {//根据输入的n调用相关函数
 		if (t == 3) {
+			system("cls");
 			Exit(AccList);
 		}
 		else if (t == 1) {
+			system("cls");
 			UserInterface(AccList);
 		}
 		else if (t == 2) {
+			system("cls");
 			AdministratorInterface(AccList);
 		}
 	}
@@ -238,7 +241,7 @@ void ReadFromFile1(DoubleLinkList AccList)
 	std::ifstream in("AccountInformation.txt");//以ifstream默认方式打开文件
 
 	if (!in.is_open())
-		cout << "文件打开失败" << endl;
+		cout << "AccountInformation.txt文件打开失败" << endl;
 	while (in.peek() != EOF) {//用peek而不是eof来防止多读入一个数据
 		LinkList t = new ListNode;
 
@@ -258,12 +261,14 @@ void ReadFromFile2(DoubleLinkList AccList)
 	std::ifstream in("DepositChangeInformation.txt");
 
 	if (!in.is_open())
-		cout << "文件打开失败" << endl;
+		cout << "DepositChangeInformation.txt文件打开失败" << endl;
 	while (p->next != nullptr) {//依次读入
 
 		(p->date).DepositChangeData.resize((p->date).NumDepositChange);//设置vector的大小
 		for (int i = 0; i < (p->date).NumDepositChange; i++) {//依次读入每条转账记录
-			in >> (p->date).DepositChangeData[i].Money >> (p->date).DepositChangeData[i].CurrentDeposit >> (p->date).DepositChangeData[i].Time;
+			in >> (p->date).DepositChangeData[i].Money
+				>> (p->date).DepositChangeData[i].CurrentDeposit
+				>> (p->date).DepositChangeData[i].Time;
 		}
 		p = p->next;
 	}
@@ -276,11 +281,14 @@ void ReadFromFile3(DoubleLinkList AccList)
 	std::ifstream in("DepositInOutInformation.txt");
 
 	if (!in.is_open())
-		cout << "文件打开失败" << endl;
+		cout << "DepositInOutInformation.txt文件打开失败" << endl;
 	while (p->next != nullptr) {
 		(p->date).DepositInOutData.resize((p->date).NumDepositInOut);
 		for (int i = 0; i < (p->date).NumDepositInOut; i++) {
-			in >> (p->date).DepositInOutData[i].Money >> (p->date).DepositInOutData[i].CurrentDeposit >> (p->date).DepositInOutData[i].Time >> (p->date).DepositInOutData[i].OtherAccount;
+			in >> (p->date).DepositInOutData[i].Money
+				>> (p->date).DepositInOutData[i].CurrentDeposit
+				>> (p->date).DepositInOutData[i].Time
+				>> (p->date).DepositInOutData[i].OtherAccount;
 		}
 		p = p->next;
 	}
@@ -291,7 +299,7 @@ void SaveToFile1(LinkList AccList)
 {
 	std::ofstream out("AccountInformation.txt");
 	if (!out.is_open()) {
-		cout << "文件打开失败" << endl;
+		cout << "AccountInformation.txt文件打开失败" << endl;
 	}
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
@@ -306,11 +314,14 @@ void SaveToFile2(LinkList AccList)
 	LinkList p = AccList->next;
 	std::ofstream out("DepositChangeInformation.txt");
 	if (!out.is_open()) {
-		cout << "文件打开失败" << endl;
+		cout << "DepositChangeInformation.txt文件打开失败" << endl;
 	}
 	while (p->next != nullptr) {
 		for (int i = 0; i < (p->date).NumDepositChange; i++) {//记得用空格和回车分开
-			out << (p->date).DepositChangeData[i].Money << " " << (p->date).DepositChangeData[i].CurrentDeposit << " " << (p->date).DepositChangeData[i].Time << endl;
+			out << (p->date).DepositChangeData[i].Money << " "
+				<< (p->date).DepositChangeData[i].CurrentDeposit << " "
+				<< (p->date).DepositChangeData[i].Time
+				<< endl;
 		}
 		p = p->next;
 	}
@@ -322,12 +333,16 @@ void SaveToFile3(LinkList AccList)
 	LinkList p = AccList->next;
 	std::ofstream out("DepositInOutInformation.txt");
 	if (!out.is_open()) {
-		cout << "文件打开失败" << endl;
+		cout << "DepositInOutInformation.txt文件打开失败" << endl;
 	}
 	while (p->next != nullptr) {
 
 		for (int i = 0; i < (p->date).NumDepositInOut; i++) {
-			out << (p->date).DepositInOutData[i].Money << " " << (p->date).DepositInOutData[i].CurrentDeposit << " " << (p->date).DepositInOutData[i].Time << " " << (p->date).DepositInOutData[i].OtherAccount << endl;
+			out << (p->date).DepositInOutData[i].Money << " "
+				<< (p->date).DepositInOutData[i].CurrentDeposit << " "
+				<< (p->date).DepositInOutData[i].Time << " "
+				<< (p->date).DepositInOutData[i].OtherAccount
+				<< endl;
 		}
 		p = p->next;
 	}
@@ -336,7 +351,12 @@ void SaveToFile3(LinkList AccList)
 
 int Welcome()
 {
-	std::cout << "欢迎使用呐呐呐ATM机管理系统\n" << "请选择相应的按钮,按回车键结束\n" << "[1]用户登录\n" << "[2]管理员登录\n" << "[3]退出" << std::endl;
+	std::cout << "欢迎使用呐呐呐ATM机管理系统\n"
+		<< "请选择相应的按钮,按回车键结束\n"
+		<< "----------[1] 用户登录----------\n"
+		<< "----------[2] 管理员登录--------\n"
+		<< "----------[3] 退出--------------"
+		<< std::endl;
 	int n;
 	std::cin >> n;
 	return n;
@@ -352,7 +372,7 @@ void Exit(DoubleLinkList AccList)
 		p = t;
 	}
 
-	std::cout << "欢迎下次使用" << std::endl;
+	std::cout << "----------欢迎下次使用----------" << std::endl;
 	exit(0);
 }
 
@@ -369,13 +389,18 @@ void UserInterface(DoubleLinkList AccList)
 		std::cin >> TemAccount;
 		//std::cin.ignore();
 		if (CheckAccount(AccList.first, TemAccount) == false) {
+			system("cls");
 			std::cout << "账号错误,请重新输入" << std::endl;
 			continue;
 		}
 		if (WrongPassword[TemAccount] >= 3) {//密码错误超过三次
+			system("cls");
 			std::cout << "该账号已锁定" << std::endl;
 			continue;
 		}
+
+		system("cls");
+		cout << "账号正确" << endl;
 		std::cout << "请输入密码,三次错误账号将被锁定" << std::endl;
 		char ch;
 
@@ -399,11 +424,14 @@ void UserInterface(DoubleLinkList AccList)
 		}
 		std::cout << std::endl;
 		if (CheckPassword(AccList.first, TemAccount, TemPassword) == false) {//判断密码是否正确
+
+			system("cls");
 			std::cout << "密码错误,请重新输入" << std::endl;
 			WrongPassword[TemAccount] = WrongPassword[TemAccount] + 1;//已输入错误密码次数加一
 			continue;
 		}
 		else {
+			system("cls");
 			std::cout << "密码正确,登陆成功" << std::endl;
 			break;
 		}
@@ -415,38 +443,67 @@ void UserInterface(DoubleLinkList AccList)
 		int n;
 		std::cin >> n;
 		if (n == 1) {
+			system("cls");
 			QueryPrintDeposit(AccList.first, TemAccount);
+			system("pause");
+			system("cls");
 		}
 		else if (n == 2) {//信息发生改变,保存文件
+			system("cls");
 			TakeInDeposit(AccList.first, TemAccount);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+			system("cls");
+
 		}
 		else if (n == 3) {//信息发生改变,保存文件
+			system("cls");
 			TakeOutDeposit(AccList.first, TemAccount);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+			system("cls");
+
+
 		}
 		else if (n == 4) {//信息发生改变,保存文件
+			system("cls");
 			GiveOtherDeposit(AccList.first, TemAccount);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+			system("cls");
+
+
 		}
 		else if (n == 5) {//信息发生改变,保存文件
+			system("cls");
 			UserChangePassword(AccList.first, TemAccount);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+			system("cls");
+
 		}
 		else if (n == 6) {
+			system("cls");
 			QueryFlowingWater(AccList.first, TemAccount);
+			system("pause");
+			system("cls");
+
 		}
 		else if (n == 7) {
+			system("cls");
 			Exit(AccList);
 			return;
+		}
+		else {
+			system("cls");
 		}
 	}
 
@@ -507,6 +564,8 @@ void TakeInDeposit(LinkList AccList, const std::string& InAccount)
 {
 	int money;
 	while (true) {
+
+		system("cls");
 		std::cout << "请输入存款金额(100整数倍),不多于5000" << std::endl;
 		std::cin >> money;
 		if (money % 100 || money <= 0 || money > 5000) {//判断存款金额是否合法
@@ -538,6 +597,7 @@ void TakeInDeposit(LinkList AccList, const std::string& InAccount)
 	std::cout << "是否打印凭条\t\t[1]是\t[2]否" << std::endl;
 	int n;
 	std::cin >> n;
+	system("cls");
 	if (n == 1) {//使用print格式控制符输出较优
 		SYSTEMTIME sys;//windowsAPI获取时间
 		GetLocalTime(&sys);
@@ -563,6 +623,8 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 	int money = 0;
 	std::cout << "请选择取款金额\n" << "[1] 100\t" << "[2] 200\n" << "[3] 500\t" << "[4] 1000\n" << "[5] 2000" << "[6] 其他金额" << std::endl;
 	std::cin >> n;
+
+	system("cls");
 	if (n == 1) money = 100;
 	else if (n == 2) money = 200;
 	else if (n == 3) money = 500;
@@ -572,6 +634,7 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 		while (true) {
 			std::cout << "请输入取款金额(100整数倍),不多于5000" << std::endl;
 			std::cin >> money;
+			system("cls");
 			if (money % 100 || money <= 0 || money > 5000) {//判断取款金额是否合法
 				cout << "取款金额有误,请重新输入" << endl;
 			}
@@ -606,6 +669,8 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 
 	cout << "是否打印凭条\t\t[1]是\t[2]否" << endl;
 	cin >> n;
+
+	system("cls");
 	if (n == 1) {//使用print格式控制符输出较优
 		SYSTEMTIME sys;//windowsAPI获取时间
 		GetLocalTime(&sys);
@@ -631,6 +696,7 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 
 		cout << "请输入转账账号" << endl;
 		cin >> TurnOutAccount;
+		system("cls");
 		if (TurnOutAccount == InAccount) {//转账合法性判断
 			cout << "不能向自己转账,请重新输入" << endl;
 			continue;
@@ -645,6 +711,7 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 
 	cout << "请输入转账人姓名" << endl;
 	cin >> TurnOutName;
+	system("cls");
 	if (CheckAccountName(AccList, TurnOutAccount, TurnOutName) == false) {//转账合法性判断
 		cout << "账号和姓名不匹配" << endl;
 		return;
@@ -652,9 +719,10 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 
 	int n;
 	int money = 0;
-	std::cout << "请选择转账金额\n" << "[1] 100\t" << "[2] 200\n" << "[3] 500\t" << "[4] 1000\n" << "[5] 2000" << "[6] 其他金额" << std::endl;
+	std::cout << "请选择转账金额\n" << "[1] 100\t\t" << "[2] 200\n" << "[3] 500\t\t" << "[4] 1000\n" << "[5] 2000\t" << "[6] 其他金额" << std::endl;
 
 	std::cin >> n;
+	system("cls");
 	if (n == 1) money = 100;
 	else if (n == 2) money = 200;
 	else if (n == 3) money = 500;
@@ -664,6 +732,7 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 		while (true) {
 			std::cout << "请输入转账金额(100整数倍),不多于5000" << std::endl;
 			std::cin >> money;
+			system("cls");
 			if (money % 100 || money <= 0 || money > 5000) {//判断取款金额是否合法
 				cout << "转账金额有误,请重新输入" << endl;
 			}
@@ -718,6 +787,7 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 
 	cout << "是否打印凭条\t\t[1]是\t[2]否" << endl;
 	cin >> n;
+	system("cls");
 	if (n == 1) {//使用print格式控制符输出较优
 		SYSTEMTIME sys;//windowsAPI获取时间
 		GetLocalTime(&sys);
@@ -761,7 +831,10 @@ void UserChangePassword(LinkList AccList, const std::string& InAccount)
 			TemPassword = TemPassword + ch;
 			putchar('*');
 		}
+
 	}
+	cout << endl;
+	system("cls");
 
 	if (CheckPassword(AccList, InAccount, TemPassword) == false) {
 		cout << "密码错误" << endl;
@@ -785,6 +858,14 @@ void UserChangePassword(LinkList AccList, const std::string& InAccount)
 			putchar('*');
 		}
 	}
+	cout << endl;
+
+	system("cls");
+
+	if (TemPassword == NewPassword) {
+		cout << "新密码和原密码相同" << endl;
+		return;
+	}
 
 	cout << "请再次输入新密码" << endl;
 
@@ -804,7 +885,9 @@ void UserChangePassword(LinkList AccList, const std::string& InAccount)
 			putchar('*');
 		}
 	}
+	cout << endl;
 
+	system("cls");
 	if (SureNewPassword == NewPassword) {//二次判断成功后才可以改
 		LinkList p = AccList->next;
 		while (p->next != nullptr) {
@@ -830,11 +913,13 @@ void AdministratorInterface(DoubleLinkList AccList)
 		TemAccount = "", TemPassword = "";
 		std::cout << "请输入账号" << std::endl;
 		std::cin >> TemAccount;
-		std::cin.ignore();
+		system("cls");
+		//std::cin.ignore();
 		if (TemAccount != AdministratorAccount) {
 			std::cout << "账号错误,请重新输入" << std::endl;
 			continue;
 		}
+		system("cls");
 		std::cout << "请输入密码" << std::endl;
 
 		char ch;
@@ -855,6 +940,7 @@ void AdministratorInterface(DoubleLinkList AccList)
 			}
 		}
 		std::cout << std::endl;
+		system("cls");
 		if (TemPassword != AdministratorPassword) {
 			std::cout << "密码错误,请重新输入" << std::endl;
 		}
@@ -867,47 +953,103 @@ void AdministratorInterface(DoubleLinkList AccList)
 
 	int n;
 	while (true) {//管理员菜单界面
-		cout << "[1] 创建用户账户\n" << "[2] 删除用户账户\n" << "[3] 查看全部用户信息\n" << "[4] 查找用户信息\n" << "[5] 修改用户信息\n" << "[6] 单条件查找\n" << "[7] 模糊查找\n" << "[8] 统计信息\n" << "[9] 查看用户流水\n" << "[10] 退出" << endl;
+
+		cout << "[1] 创建用户账户\n"
+			<< "[2] 删除用户账户\n"
+			<< "[3] 查看全部用户信息\n"
+			<< "[4] 查找用户信息\n"
+			<< "[5] 修改用户信息\n"
+			<< "[6] 单条件查找\n"
+			<< "[7] 模糊查找\n"
+			<< "[8] 统计信息\n"
+			<< "[9] 查看用户流水\n"
+			<< "[10] 退出"
+			<< endl;
 		cin >> n;
 		if (n == 1) {//用户信息改变,保存文件
+
+			system("cls");
 			CreateUserAccount(AccList);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+			system("cls");
 		}
 		else if (n == 2) {//用户信息改变,保存文件
+			system("cls");
 			DeleteUserAccount(AccList.first);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+
+			system("cls");
 		}
 		else if (n == 3) {
+			system("cls");
 			ShowAllUsersInformation(AccList.first);
+			system("pause");
+
+			system("cls");
 		}
 		else if (n == 4) {
+			system("cls");
 			FindUserInformation(AccList.first);
+			system("pause");
+
+			system("cls");
 		}
 		else if (n == 5) {//用户信息改变,保存文件
+			system("cls");
 			ChangeUserInformation(AccList.first);
 			SaveToFile1(AccList.first);
 			SaveToFile2(AccList.first);
 			SaveToFile3(AccList.first);
+			system("pause");
+
+			system("cls");
 		}
 		else if (n == 6) {
+			system("cls");
 			SingleConditionSearch(AccList.first);
+			system("pause");
+
+			system("cls");
 		}
 		else if (n == 7) {
+			system("cls");
 			FuzzySearch(AccList.first);
+			system("pause");
+
+			system("cls");
 		}
 		else if (n == 8) {
+			system("cls");
+
 			StatisticalInformation(AccList.first);
+			system("pause");
+
+			system("cls");
+
 		}
 		else if (n == 9) {
+			system("cls");
+
 			SeeUserBill(AccList.first);
+			system("pause");
+
+			system("cls");
+
 		}
 		else if (n == 10) {
+			system("cls");
+
 			Exit(AccList);
 			return;
+		}
+		else {
+			system("cls");
 		}
 	}
 }
@@ -916,6 +1058,8 @@ void CreateUserAccount(DoubleLinkList AccList)//传入的是头尾指针
 	cout << "请依次输入 账号 密码 姓名 性别(01表示) 手机号" << endl;
 	LinkList t = new ListNode;
 	cin >> t->date;
+	system("cls");
+
 	if (CheckAccount(AccList.first, (t->date).GetMyAccount()) == true) {//先判断这账号是否已经存在
 		cout << "该账号已存在,创建失败" << endl;
 		delete t;
@@ -935,6 +1079,8 @@ void DeleteUserAccount(LinkList AccList)
 	while (true) {//合法性判断
 		cout << "请输入要删除的账号" << endl;
 		cin >> TemAccount;
+		system("cls");
+
 		if (CheckAccount(AccList, TemAccount) == false) {
 			cout << "账号不存在,请重新输入" << endl;
 		}
@@ -966,6 +1112,8 @@ void ShowAllUsersInformation(LinkList AccList)
 	cout << "[5] 按姓名降序排序" << endl;
 	cout << "[6] 按姓名升序排序" << endl;
 	cin >> n;
+	system("cls");
+
 	//各种排序,都是选择排序
 	if (n == 1) {
 		UsersAccountDown(AccList);
@@ -985,9 +1133,16 @@ void ShowAllUsersInformation(LinkList AccList)
 	else if (n == 6) {
 		UsersNameUp(AccList);
 	}
+
 	LinkList p = AccList->next;
 	if (BankAccount::NumBankAccount > 2) {//要是链表不为空
-		cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+		cout << std::left << std::setw(15) << "账号"
+			<< std::left << std::setw(15) << "密码"
+			<< std::left << std::setw(15) << "姓名"
+			<< std::left << std::setw(15) << "性别"
+			<< std::left << std::setw(15) << "手机号"
+			<< std::left << std::setw(15) << "余额"
+			<< endl;
 	}
 	else if (BankAccount::NumBankAccount == 2) {
 		cout << "无用户信息" << endl;
@@ -1091,8 +1246,9 @@ void FindUserInformation(LinkList AccList)
 {
 	string TemAccount = "";
 	while (true) {
-		cout << "请输入查找的账号" << endl;
+		cout << "请输入要查找的账号" << endl;
 		cin >> TemAccount;
+		system("cls");
 		if (CheckAccount(AccList, TemAccount) == false) {
 			cout << "账号不存在,请重新输入" << endl;
 		}
@@ -1101,7 +1257,13 @@ void FindUserInformation(LinkList AccList)
 		}
 	}
 
-	cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+	cout << std::left << std::setw(15) << "账号"
+		<< std::left << std::setw(15) << "密码"
+		<< std::left << std::setw(15) << "姓名"
+		<< std::left << std::setw(15) << "性别"
+		<< std::left << std::setw(15) << "手机号"
+		<< std::left << std::setw(15) << "余额"
+		<< endl;
 
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
@@ -1120,6 +1282,8 @@ void ChangeUserInformation(LinkList AccList)
 	while (true) {
 		cout << "请输入需要修改的账号" << endl;
 		cin >> TemAccount;
+		system("cls");
+
 		if (CheckAccount(AccList, TemAccount) == false) {
 			cout << "账号不存在,请重新输入" << endl;
 		}
@@ -1137,12 +1301,23 @@ void ChangeUserInformation(LinkList AccList)
 	}
 
 	int n;
-	cout << "请选择修改的信息\n" << "[1] 密码\n" << "[2] 姓名\n" << "[3] 手机号\n" << "[4] 存款" << endl;
+	cout << "请选择修改的信息\n"
+		<< "[1] 密码\n"
+		<< "[2] 姓名\n"
+		<< "[3] 手机号\n"
+		<< "[4] 存款"
+		<< endl;
 	cin >> n;
 	if (n == 1) {//管理员改密码自然不用加密处理
 		cout << "请输入新密码" << endl;
 		string TemPassword;
 		cin >> TemPassword;
+		system("cls");
+		if ((p->date).GetMyPassword() == TemPassword) {
+			cout << "新密码与原密码相同,修改失败" << endl;
+			return;
+		}
+
 		(p->date).SetPassword(TemPassword);
 		cout << "密码修改成功" << endl;
 
@@ -1153,6 +1328,13 @@ void ChangeUserInformation(LinkList AccList)
 		cout << "请输入新姓名" << endl;
 		string TemName;
 		cin >> TemName;
+		system("cls");
+
+		if ((p->date).GetMyName() == TemName) {
+			cout << "新姓名与原姓名相同,修改失败" << endl;
+			return;
+		}
+
 		(p->date).SetName(TemName);
 		cout << "姓名修改成功" << endl;
 
@@ -1161,6 +1343,13 @@ void ChangeUserInformation(LinkList AccList)
 		cout << "请输入新手机号" << endl;
 		long long TemTel;
 		cin >> TemTel;
+		system("cls");
+
+		if ((p->date).GetMyTel() == TemTel) {
+			cout << "新手机号与原手机号相同,修改失败" << endl;
+			return;
+		}
+
 		(p->date).SetTel(TemTel);
 		cout << "手机号修改成功" << endl;
 
@@ -1170,8 +1359,10 @@ void ChangeUserInformation(LinkList AccList)
 		cout << "请输入修改的存款,负数表示存款减少" << endl;
 		double t;
 		cin >> t;
-		if (t < 0 && (p->date).GetMyDeposit() + t < 0) {
-			cout << "错误,存款不能为负数" << endl;
+		system("cls");
+		if (t == 0) {
+			cout << "存款变更必须为一个非零值" << endl;
+			return;
 		}
 		else {
 			(p->date).ModifyDeposit(t);
@@ -1194,9 +1385,14 @@ void ChangeUserInformation(LinkList AccList)
 void SingleConditionSearch(LinkList AccList)
 {
 	cout << "请选择条件" << endl;
-	cout << "[1] 按性别查询\n" << "[2] 按姓名查询\n" << "[3] 按手机号查询\n" << "[4] 按存款查询" << endl;
+	cout << "[1] 按性别查询\n"
+		<< "[2] 按姓名查询\n"
+		<< "[3] 按手机号查询\n"
+		<< "[4] 按存款查询"
+		<< endl;
 	int n;
 	cin >> n;
+	system("cls");
 
 	//一个人可以开很多张银行卡,多个银行卡可以绑定一个手机号
 	if (n == 1) {
@@ -1218,6 +1414,8 @@ void GenderSearch(LinkList AccList)
 	cout << "请输入要查询的性别,1表示男性,0表示女性" << endl;
 	int n;
 	cin >> n;
+	system("cls");
+
 	if (n == 0 || n == 1) {//输入符合要求
 		bool IsFind = false;//先假设没有符合要求的用户
 
@@ -1225,7 +1423,13 @@ void GenderSearch(LinkList AccList)
 		while (p->next != nullptr) {
 			if ((p->date).GetMyGender() == n) {
 				if (IsFind == false) {//如果是第一次找到,输出属性栏
-					cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+					cout << std::left << std::setw(15) << "账号"
+						<< std::left << std::setw(15) << "密码"
+						<< std::left << std::setw(15) << "姓名"
+						<< std::left << std::setw(15) << "性别"
+						<< std::left << std::setw(15) << "手机号"
+						<< std::left << std::setw(15) << "余额"
+						<< endl;
 				}
 
 				cout << p->date;
@@ -1248,13 +1452,20 @@ void NameSearch(LinkList AccList)
 	cout << "请输入要查询的姓名" << endl;
 	string TemName;
 	cin >> TemName;
+	system("cls");
 
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if ((p->date).GetMyName() == TemName) {
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1270,13 +1481,20 @@ void TelSearch(LinkList AccList)
 	cout << "请输入要查询的电话号" << endl;
 	long long TemTel;
 	cin >> TemTel;
+	system("cls");
 
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if ((p->date).GetMyTel() == TemTel) {
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1292,13 +1510,19 @@ void DepositSearch(LinkList AccList)
 	cout << "请输入存款分界点" << endl;
 	double k;
 	cin >> k;
-	cout << "请选择查询方式\n" << "[1] 查询存款小于该值的用户\n" << "[2] 查询存款不小于该值的用户";
+	system("cls");
+
+	cout << "请选择查询方式\n"
+		<< "[1] 查询存款小于该值的用户\n"
+		<< "[2] 查询存款不小于该值的用户";
 	int n;
 	cin >> n;
+	system("cls");
+
 	if (n == 1) {
 		SearchLowerThanDeposit(AccList, k);
 	}
-	else if(n==2) {
+	else if (n == 2) {
 		SearchUpperThanDeposit(AccList, k);
 	}
 }
@@ -1310,7 +1534,13 @@ void SearchLowerThanDeposit(LinkList AccList, const double& AfferentDeposit) {
 		if ((p->date).GetMyDeposit() < AfferentDeposit) {
 
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 
 			cout << p->date;
@@ -1330,7 +1560,13 @@ void SearchUpperThanDeposit(LinkList AccList, const double& AfferentDeposit)
 	while (p->next != nullptr) {
 		if ((p->date).GetMyDeposit() >= AfferentDeposit) {
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1345,10 +1581,14 @@ void SearchUpperThanDeposit(LinkList AccList, const double& AfferentDeposit)
 void FuzzySearch(LinkList AccList)
 {
 	cout << "请选择模糊查找模式" << endl;
-	cout << "[1] 按姓氏查找(不支持复姓)\n" << "[2] 按姓名中关键字查询\n" << "[3] 按手机号前三位查询\n" << "[4] 按手机号后四位查询" << endl;
+	cout << "[1] 按姓氏查找(不支持复姓)\n"
+		<< "[2] 按姓名中关键字查询\n"
+		<< "[3] 按手机号前三位查询\n"
+		<< "[4] 按手机号后四位查询" << endl;
 	int n;
 	cin >> n;
-	
+	system("cls");
+
 	//正常人思维
 	if (n == 1) {
 		SearchAsSurname(AccList);
@@ -1370,6 +1610,8 @@ void SearchAsSurname(LinkList AccList)
 	while (true) {
 		cout << "请输入姓氏,复姓请输入姓氏第一个字" << endl;
 		cin >> TemName;
+		system("cls");
+
 		if (TemName.size() != 2) {//一个中文汉字占两个字节
 			cout << "输入不合法,请重新输入" << endl;
 		}
@@ -1386,7 +1628,13 @@ void SearchAsSurname(LinkList AccList)
 		//string的find方法返回第一次找到那个子串的位置首字符的下标,如果没有找到,返回npos,这是一个常量,表示size_t的最大值4294967295,显然如果返回了下标0,代表姓氏匹配上了
 		if ((p->date).GetMyName().find(TemName) == 0) {
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1404,13 +1652,20 @@ void SearchAsKeyWord(LinkList AccList)
 	string TemName = "";
 	cout << "请输入要查找的姓名关键字" << endl;
 	cin >> TemName;
+	system("cls");
 
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if ((p->date).GetMyName().find(TemName) != string::npos) {//不等于npos代表找到了
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1428,6 +1683,8 @@ void SearchAsTelTopThree(LinkList AccList)
 	while (true) {
 		cout << "请输入要查找的手机号前三位" << endl;
 		cin >> TemTel;
+		system("cls");
+
 		if (TemTel.size() != 3) {
 			cout << "输入不合法,请重新输入" << endl;
 			continue;
@@ -1444,13 +1701,18 @@ void SearchAsTelTopThree(LinkList AccList)
 	stream << TemTel;
 	stream >> RealTel;
 
-
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if ((p->date).GetMyTel() / 100000000 == RealTel) {//默认手机号是11位的,使用longlong存储
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1468,6 +1730,8 @@ void SearchAsTelLastFour(LinkList AccList)
 	while (true) {
 		cout << "请输入要查找的手机号后四位" << endl;
 		cin >> TemTel;
+		system("cls");
+
 		if (TemTel.size() != 4) {
 			cout << "输入不合法,请重新输入" << endl;
 			continue;
@@ -1484,13 +1748,18 @@ void SearchAsTelLastFour(LinkList AccList)
 	stream << TemTel;
 	stream >> RealTel;
 
-
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if ((p->date).GetMyTel() % 10000 == RealTel) {//取得后四位
 			if (IsFind == false) {
-				cout << std::left << std::setw(15) << "账号" << std::left << std::setw(15) << "密码" << std::left << std::setw(15) << "姓名" << std::left << std::setw(15) << "性别" << std::left << std::setw(15) << "手机号" << std::left << std::setw(15) << "余额" << endl;
+				cout << std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(15) << "密码"
+					<< std::left << std::setw(15) << "姓名"
+					<< std::left << std::setw(15) << "性别"
+					<< std::left << std::setw(15) << "手机号"
+					<< std::left << std::setw(15) << "余额"
+					<< endl;
 			}
 			cout << p->date;
 			IsFind = true;
@@ -1529,8 +1798,10 @@ void StatisticalInformation(LinkList AccList)
 void QueryFlowingWater(LinkList AccList, const std::string& InAccount)
 {
 	int n;
-	cout << "请选择相应的按钮\n" << "[1] 存取款流水" << "[2] 转账流水" << endl;
+	cout << "请选择相应的按钮\n" << "[1] 存取款流水\t" << "[2] 转账流水" << endl;
 	cin >> n;
+	system("cls");
+
 	if (n == 1) {
 		DepositInOutBill(AccList, InAccount);
 	}
@@ -1550,9 +1821,18 @@ void DepositInOutBill(LinkList AccList, const std::string& InAccount)
 				cout << "无存取款流水信息" << endl;
 			}
 			else {
-				cout << std::left << std::setw(15) << "行为" << std::left << std::setw(15) << "账号" << std::left << std::setw(25) << "时间" << std::left << std::setw(15) << "存款变动" << std::left << std::setw(15) << "当前存款" << endl;
+				cout << std::left << std::setw(15) << "行为"
+					<< std::left << std::setw(15) << "账号"
+					<< std::left << std::setw(25) << "时间"
+					<< std::left << std::setw(15) << "存款变动"
+					<< std::left << std::setw(15) << "当前存款"
+					<< endl;
 				for (auto& ans : (p->date).DepositChangeData) {
-					cout << std::left << std::setw(15) << (ans.Money > 0 ? "存款" : "取款") << std::left << std::setw(15) << (p->date).GetMyAccount() << std::left << std::setw(25) << ans.Time << std::left << std::setw(15) << std::showpos << ans.Money << std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
+					cout << std::left << std::setw(15) << (ans.Money > 0 ? "存款" : "取款")
+						<< std::left << std::setw(15) << (p->date).GetMyAccount()
+						<< std::left << std::setw(25) << ans.Time
+						<< std::left << std::setw(15) << std::showpos << ans.Money
+						<< std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
 				}
 			}
 
@@ -1571,9 +1851,20 @@ void DepositChangeBill(LinkList AccList, const std::string& InAccount)
 				cout << "无转账流水信息" << endl;
 			}
 			else {
-				cout << std::left << std::setw(15) << "行为" << std::left << std::setw(15) << "转出账号" << std::left << std::setw(15) << "转入账号" << std::left << std::setw(25) << "时间" << std::left << std::setw(15) << "存款变动" << std::left << std::setw(15) << "当前存款" << endl;
+				cout << std::left << std::setw(15) << "行为"
+					<< std::left << std::setw(15) << "转出账号"
+					<< std::left << std::setw(15) << "转入账号"
+					<< std::left << std::setw(25) << "时间"
+					<< std::left << std::setw(15) << "存款变动"
+					<< std::left << std::setw(15) << "当前存款"
+					<< endl;
 				for (auto& ans : (p->date).DepositInOutData) {
-					cout << std::left << std::setw(15) << (ans.Money > 0 ? "转入" : "转出") << std::left << std::setw(15) << (ans.Money > 0 ? ans.OtherAccount : (p->date).GetMyAccount()) << std::left << std::setw(15) << (ans.Money < 0 ? ans.OtherAccount : (p->date).GetMyAccount()) << std::left << std::setw(25) << ans.Time << std::left << std::setw(15) << std::showpos << ans.Money << std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
+					cout << std::left << std::setw(15) << (ans.Money > 0 ? "转入" : "转出")
+						<< std::left << std::setw(15) << (ans.Money > 0 ? ans.OtherAccount : (p->date).GetMyAccount())
+						<< std::left << std::setw(15) << (ans.Money < 0 ? ans.OtherAccount : (p->date).GetMyAccount())
+						<< std::left << std::setw(25) << ans.Time
+						<< std::left << std::setw(15) << std::showpos << ans.Money
+						<< std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
 				}
 			}
 
@@ -1589,6 +1880,8 @@ void SeeUserBill(LinkList AccList)
 	while (true) {
 		cout << "请输入要查看的账号" << endl;
 		cin >> TemAccount;
+		system("cls");
+
 		if (CheckAccount(AccList, TemAccount) == false) {
 			cout << "账号不存在,请重新输入" << endl;
 		}
