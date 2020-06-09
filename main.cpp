@@ -349,6 +349,7 @@ void Exit(DoubleLinkList AccList)
 	while (p != nullptr) {//依次删除
 		t = p->next;
 		delete p;
+		p = t;
 	}
 
 	std::cout << "欢迎下次使用" << std::endl;

@@ -48,3 +48,7 @@ http://zisxks.com/2013/10/25/sort-Chinese-characters-in-cpp/
 算是完结撒花了吧,接下来的工作就是,加注释和美化了
 
 要是不写using namespace std,那得把常用的cin和cout,endl用using关键字给引入进来,不然真的要累死
+
+哇,最后忘了释放内存了...
+
+加完注释了.发现了个函数分支没写清楚,累死,明天开始美化界面
