@@ -1514,7 +1514,8 @@ void DepositSearch(LinkList AccList)
 
 	cout << "请选择查询方式\n"
 		<< "[1] 查询存款小于该值的用户\n"
-		<< "[2] 查询存款不小于该值的用户";
+		<< "[2] 查询存款不小于该值的用户"
+		<<endl;
 	int n;
 	cin >> n;
 	system("cls");

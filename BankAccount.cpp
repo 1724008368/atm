@@ -11,7 +11,7 @@ BankAccount::BankAccount(const std::string AfferentAccount, const  std::string A
 /*******构造函数结束*******/
 
 /*******复制构造函数开始*******/
-BankAccount::BankAccount(const BankAccount& OtherBankAccount):BaseUser(OtherBankAccount), MyGender(OtherBankAccount.MyGender), MyTel(OtherBankAccount.MyTel), MyDeposit(OtherBankAccount.MyDeposit)
+BankAccount::BankAccount(const BankAccount& OtherBankAccount):BaseUser(OtherBankAccount), DepositChangeData(OtherBankAccount.DepositChangeData), DepositInOutData(OtherBankAccount.DepositInOutData),NumDepositChange(OtherBankAccount.NumDepositChange),NumDepositInOut(OtherBankAccount.NumDepositInOut),MyGender(OtherBankAccount.MyGender), MyTel(OtherBankAccount.MyTel), MyDeposit(OtherBankAccount.MyDeposit)
 {
 	NumBankAccount++;
 }
