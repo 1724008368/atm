@@ -10,6 +10,7 @@
 #include <windows.h>
 #include <sstream> 
 
+
 //实现按中文拼音比较
 //这段我不懂,别问我
 #ifdef _MSC_VER
@@ -53,7 +54,7 @@ DoubleLinkList CreateList();
 int Welcome();
 
 //结束语
-void Exit(DoubleLinkList AccList);
+void Exit(LinkList AccList);
 
 //从文件读入账户信息
 void ReadFromFile1(DoubleLinkList AccList);
@@ -203,6 +204,7 @@ void DepositChangeBill(LinkList AccList, const std::string& InAccount);
 //主函数
 int main()
 {
+	
 	DoubleLinkList AccList = CreateList();//创建链表
 	ReadFromFile1(AccList);//开始读文件
 	ReadFromFile2(AccList);
@@ -210,7 +212,7 @@ int main()
 	while (int t = Welcome()) {//根据输入的n调用相关函数
 		if (t == 3) {
 			system("cls");
-			Exit(AccList);
+			Exit(AccList.first);
 		}
 		else if (t == 1) {
 			system("cls");
@@ -240,8 +242,11 @@ void ReadFromFile1(DoubleLinkList AccList)
 	LinkList p = AccList.second;
 	std::ifstream in("AccountInformation.txt");//以ifstream默认方式打开文件
 
-	if (!in.is_open())
+	if (!in.is_open()) {
 		cout << "AccountInformation.txt文件打开失败" << endl;
+		Exit(AccList.first);
+	}
+
 	while (in.peek() != EOF) {//用peek而不是eof来防止多读入一个数据
 		LinkList t = new ListNode;
 
@@ -260,8 +265,11 @@ void ReadFromFile2(DoubleLinkList AccList)
 	LinkList p = AccList.first->next;
 	std::ifstream in("DepositChangeInformation.txt");
 
-	if (!in.is_open())
+	if (!in.is_open()) {
 		cout << "DepositChangeInformation.txt文件打开失败" << endl;
+		Exit(AccList.first);
+	}
+
 	while (p->next != nullptr) {//依次读入
 
 		(p->date).DepositChangeData.resize((p->date).NumDepositChange);//设置vector的大小
@@ -280,8 +288,11 @@ void ReadFromFile3(DoubleLinkList AccList)
 	LinkList p = AccList.first->next;
 	std::ifstream in("DepositInOutInformation.txt");
 
-	if (!in.is_open())
+	if (!in.is_open()) {
 		cout << "DepositInOutInformation.txt文件打开失败" << endl;
+		Exit(AccList.first);
+	}
+
 	while (p->next != nullptr) {
 		(p->date).DepositInOutData.resize((p->date).NumDepositInOut);
 		for (int i = 0; i < (p->date).NumDepositInOut; i++) {
@@ -300,6 +311,7 @@ void SaveToFile1(LinkList AccList)
 	std::ofstream out("AccountInformation.txt");
 	if (!out.is_open()) {
 		cout << "AccountInformation.txt文件打开失败" << endl;
+		Exit(AccList);
 	}
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
@@ -315,6 +327,7 @@ void SaveToFile2(LinkList AccList)
 	std::ofstream out("DepositChangeInformation.txt");
 	if (!out.is_open()) {
 		cout << "DepositChangeInformation.txt文件打开失败" << endl;
+		Exit(AccList);
 	}
 	while (p->next != nullptr) {
 		for (int i = 0; i < (p->date).NumDepositChange; i++) {//记得用空格和回车分开
@@ -334,6 +347,8 @@ void SaveToFile3(LinkList AccList)
 	std::ofstream out("DepositInOutInformation.txt");
 	if (!out.is_open()) {
 		cout << "DepositInOutInformation.txt文件打开失败" << endl;
+		Exit(AccList);
+
 	}
 	while (p->next != nullptr) {
 
@@ -362,9 +377,9 @@ int Welcome()
 	return n;
 }
 
-void Exit(DoubleLinkList AccList)
+void Exit(LinkList AccList)
 {
-	LinkList p = AccList.first;
+	LinkList p = AccList;
 	LinkList t = p->next;
 	while (p != nullptr) {//依次删除
 		t = p->next;
@@ -438,9 +453,11 @@ void UserInterface(DoubleLinkList AccList)
 		//std::cout << TemAccount << std::endl << TemPassword << std::endl;
 	}
 
+	freopen("in.txt", "r", stdin);
 	while (true) {//菜单界面
 		std::cout << "请选择相应的按钮,按回车键结束\n" << "[1] 查询余额\n" << "[2] 存款\n" << "[3] 取款\n" << "[4] 转账\n" << "[5] 修改密码\n" << "[6] 查询流水\n" << "[7] 退卡\n" << std::endl;
 		int n;
+		Sleep(1500);
 		std::cin >> n;
 		if (n == 1) {
 			system("cls");
@@ -499,7 +516,7 @@ void UserInterface(DoubleLinkList AccList)
 		}
 		else if (n == 7) {
 			system("cls");
-			Exit(AccList);
+			Exit(AccList.first);
 			return;
 		}
 		else {
@@ -563,18 +580,20 @@ void QueryPrintDeposit(LinkList AccList, const std::string& InAccount)
 void TakeInDeposit(LinkList AccList, const std::string& InAccount)
 {
 	int money;
-	while (true) {
+	//while (true) {
 
-		system("cls");
-		std::cout << "请输入存款金额(100整数倍),不多于5000" << std::endl;
-		std::cin >> money;
-		if (money % 100 || money <= 0 || money > 5000) {//判断存款金额是否合法
-			cout << "存款金额有误,请重新输入" << endl;
-		}
-		else
-			break;
-	}
+	//	system("cls");
+	//	std::cout << "请输入存款金额(100整数倍),不多于5000" << std::endl;
+	//	std::cin >> money;
+	//	if (money % 100 || money <= 0 || money > 5000) {//判断存款金额是否合法
+	//		cout << "存款金额有误,请重新输入" << endl;
+	//	}
+	//	else
+	//		break;
+	//}
 
+	srand(unsigned int(time(0)));
+	money = (rand() % 30+1)*100;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if (InAccount == (p->date).GetMyAccount()) {
@@ -621,7 +640,7 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 {
 	int n;
 	int money = 0;
-	std::cout << "请选择取款金额\n" << "[1] 100\t" << "[2] 200\n" << "[3] 500\t" << "[4] 1000\n" << "[5] 2000" << "[6] 其他金额" << std::endl;
+	std::cout << "请选择取款金额\n" << "[1] 100\t\t" << "[2] 200\n" << "[3] 500\t\t" << "[4] 1000\n" << "[5] 2000\t" << "[6] 其他金额" << std::endl;
 	std::cin >> n;
 
 	system("cls");
@@ -631,16 +650,18 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 	else if (n == 4) money = 1000;
 	else if (n == 5) money = 2000;
 	else if (n == 6) {
-		while (true) {
-			std::cout << "请输入取款金额(100整数倍),不多于5000" << std::endl;
-			std::cin >> money;
-			system("cls");
-			if (money % 100 || money <= 0 || money > 5000) {//判断取款金额是否合法
-				cout << "取款金额有误,请重新输入" << endl;
-			}
-			else
-				break;
-		}
+		//while (true) {
+		//	std::cout << "请输入取款金额(100整数倍),不多于5000" << std::endl;
+		//	std::cin >> money;
+		//	system("cls");
+		//	if (money % 100 || money <= 0 || money > 5000) {//判断取款金额是否合法
+		//		cout << "取款金额有误,请重新输入" << endl;
+		//	}
+		//	else
+		//		break;
+		//}
+		srand(unsigned int(time(0)));
+		money = (rand() % 10 + 1) * 100;
 	}
 
 	LinkList p = AccList->next;
@@ -951,6 +972,7 @@ void AdministratorInterface(DoubleLinkList AccList)
 		//std::cout << TemAccount << std::endl << TemPassword << std::endl;
 	}
 
+	//freopen("in.txt", "r", stdin);
 	int n;
 	while (true) {//管理员菜单界面
 
@@ -1045,7 +1067,7 @@ void AdministratorInterface(DoubleLinkList AccList)
 		else if (n == 10) {
 			system("cls");
 
-			Exit(AccList);
+			Exit(AccList.first);
 			return;
 		}
 		else {
@@ -1515,7 +1537,7 @@ void DepositSearch(LinkList AccList)
 	cout << "请选择查询方式\n"
 		<< "[1] 查询存款小于该值的用户\n"
 		<< "[2] 查询存款不小于该值的用户"
-		<<endl;
+		<< endl;
 	int n;
 	cin >> n;
 	system("cls");
@@ -1822,19 +1844,23 @@ void DepositInOutBill(LinkList AccList, const std::string& InAccount)
 				cout << "无存取款流水信息" << endl;
 			}
 			else {
-				cout << std::left << std::setw(15) << "行为"
+				cout << std::left << std::setw(5) << "序号"
+					<< std::left << std::setw(15) << "行为"
 					<< std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(25) << "时间"
 					<< std::left << std::setw(15) << "存款变动"
 					<< std::left << std::setw(15) << "当前存款"
 					<< endl;
+				int MyCount = 0;
 				for (auto& ans : (p->date).DepositChangeData) {
-					cout << std::left << std::setw(15) << (ans.Money > 0 ? "存款" : "取款")
+					cout << std::left << std::setw(5) << ++MyCount
+						<< std::left << std::setw(15) << (ans.Money > 0 ? "存款" : "取款")
 						<< std::left << std::setw(15) << (p->date).GetMyAccount()
 						<< std::left << std::setw(25) << ans.Time
 						<< std::left << std::setw(15) << std::showpos << ans.Money
 						<< std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
 				}
+				cout << "\n共 " << MyCount << " 条存取款记录" << endl;
 			}
 
 		}
@@ -1852,21 +1878,25 @@ void DepositChangeBill(LinkList AccList, const std::string& InAccount)
 				cout << "无转账流水信息" << endl;
 			}
 			else {
-				cout << std::left << std::setw(15) << "行为"
+				cout <<std::left<<std::setw(5)<<"序号"
+					<< std::left << std::setw(15) << "行为"
 					<< std::left << std::setw(15) << "转出账号"
 					<< std::left << std::setw(15) << "转入账号"
 					<< std::left << std::setw(25) << "时间"
 					<< std::left << std::setw(15) << "存款变动"
 					<< std::left << std::setw(15) << "当前存款"
 					<< endl;
+				int MyCount = 0;
 				for (auto& ans : (p->date).DepositInOutData) {
-					cout << std::left << std::setw(15) << (ans.Money > 0 ? "转入" : "转出")
+					cout << std::left << std::setw(5) << ++MyCount
+						<< std::left << std::setw(15) << (ans.Money > 0 ? "转入" : "转出")
 						<< std::left << std::setw(15) << (ans.Money > 0 ? ans.OtherAccount : (p->date).GetMyAccount())
 						<< std::left << std::setw(15) << (ans.Money < 0 ? ans.OtherAccount : (p->date).GetMyAccount())
 						<< std::left << std::setw(25) << ans.Time
 						<< std::left << std::setw(15) << std::showpos << ans.Money
 						<< std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
 				}
+				cout << "\n共 " << MyCount << " 条转账记录" << endl;
 			}
 
 		}
