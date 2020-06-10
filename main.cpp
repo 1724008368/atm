@@ -331,8 +331,8 @@ void SaveToFile2(LinkList AccList)
 	}
 	while (p->next != nullptr) {
 		for (int i = 0; i < (p->date).NumDepositChange; i++) {//记得用空格和回车分开
-			out << (p->date).DepositChangeData[i].Money << " "
-				<< (p->date).DepositChangeData[i].CurrentDeposit << " "
+			out << std::fixed << std::setprecision(2) << (p->date).DepositChangeData[i].Money << " "
+				<< std::fixed << std::setprecision(2) << (p->date).DepositChangeData[i].CurrentDeposit << " "
 				<< (p->date).DepositChangeData[i].Time
 				<< endl;
 		}
@@ -353,8 +353,8 @@ void SaveToFile3(LinkList AccList)
 	while (p->next != nullptr) {
 
 		for (int i = 0; i < (p->date).NumDepositInOut; i++) {
-			out << (p->date).DepositInOutData[i].Money << " "
-				<< (p->date).DepositInOutData[i].CurrentDeposit << " "
+			out << std::fixed << std::setprecision(2) << (p->date).DepositInOutData[i].Money << " "
+				<< std::fixed << std::setprecision(2) << (p->date).DepositInOutData[i].CurrentDeposit << " "
 				<< (p->date).DepositInOutData[i].Time << " "
 				<< (p->date).DepositInOutData[i].OtherAccount
 				<< endl;
@@ -453,11 +453,11 @@ void UserInterface(DoubleLinkList AccList)
 		//std::cout << TemAccount << std::endl << TemPassword << std::endl;
 	}
 
-	freopen("in.txt", "r", stdin);
+	//freopen("in.txt", "r", stdin);
 	while (true) {//菜单界面
 		std::cout << "请选择相应的按钮,按回车键结束\n" << "[1] 查询余额\n" << "[2] 存款\n" << "[3] 取款\n" << "[4] 转账\n" << "[5] 修改密码\n" << "[6] 查询流水\n" << "[7] 退卡\n" << std::endl;
 		int n;
-		Sleep(1500);
+		//Sleep(1500);
 		std::cin >> n;
 		if (n == 1) {
 			system("cls");
@@ -580,20 +580,22 @@ void QueryPrintDeposit(LinkList AccList, const std::string& InAccount)
 void TakeInDeposit(LinkList AccList, const std::string& InAccount)
 {
 	int money;
-	//while (true) {
+	while (true) {
 
-	//	system("cls");
-	//	std::cout << "请输入存款金额(100整数倍),不多于5000" << std::endl;
-	//	std::cin >> money;
-	//	if (money % 100 || money <= 0 || money > 5000) {//判断存款金额是否合法
-	//		cout << "存款金额有误,请重新输入" << endl;
-	//	}
-	//	else
-	//		break;
-	//}
+		system("cls");
+		std::cout << "请输入存款金额(100整数倍),不多于5000" << std::endl;
+		std::cin >> money;
+		if (money % 100 || money <= 0 || money > 5000) {//判断存款金额是否合法
+			cout << "存款金额有误,请重新输入" << endl;
+		}
+		else
+			break;
+	}
 
-	srand(unsigned int(time(0)));
-	money = (rand() % 30+1)*100;
+	//加测试数据用的随机数
+	/*srand(unsigned int(time(0)));
+	money = (rand() % 15+1)*100;*/
+
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
 		if (InAccount == (p->date).GetMyAccount()) {
@@ -650,18 +652,18 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 	else if (n == 4) money = 1000;
 	else if (n == 5) money = 2000;
 	else if (n == 6) {
-		//while (true) {
-		//	std::cout << "请输入取款金额(100整数倍),不多于5000" << std::endl;
-		//	std::cin >> money;
-		//	system("cls");
-		//	if (money % 100 || money <= 0 || money > 5000) {//判断取款金额是否合法
-		//		cout << "取款金额有误,请重新输入" << endl;
-		//	}
-		//	else
-		//		break;
-		//}
-		srand(unsigned int(time(0)));
-		money = (rand() % 10 + 1) * 100;
+		while (true) {
+			std::cout << "请输入取款金额(100整数倍),不多于5000" << std::endl;
+			std::cin >> money;
+			system("cls");
+			if (money % 100 || money <= 0 || money > 5000) {//判断取款金额是否合法
+				cout << "取款金额有误,请重新输入" << endl;
+			}
+			else
+				break;
+		}
+		/*srand(unsigned int(time(0)));
+		money = (rand() % 10 + 1) * 100;*/
 	}
 
 	LinkList p = AccList->next;
@@ -1381,6 +1383,10 @@ void ChangeUserInformation(LinkList AccList)
 		cout << "请输入修改的存款,负数表示存款减少" << endl;
 		double t;
 		cin >> t;
+
+		//随机小数
+		/*srand(unsigned int(time(0)));
+		t = 0.11 + 1.0 * rand() / RAND_MAX * (0.95 - 0.11);*/
 		system("cls");
 		if (t == 0) {
 			cout << "存款变更必须为一个非零值" << endl;
@@ -1854,7 +1860,7 @@ void DepositInOutBill(LinkList AccList, const std::string& InAccount)
 				int MyCount = 0;
 				for (auto& ans : (p->date).DepositChangeData) {
 					cout << std::left << std::setw(5) << ++MyCount
-						<< std::left << std::setw(15) << (ans.Money > 0 ? "存款" : "取款")
+						<< std::left << std::setw(15) << (ans.Money >= 0 ? "存款" : "取款")
 						<< std::left << std::setw(15) << (p->date).GetMyAccount()
 						<< std::left << std::setw(25) << ans.Time
 						<< std::left << std::setw(15) << std::showpos << ans.Money

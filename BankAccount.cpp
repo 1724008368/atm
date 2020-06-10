@@ -93,7 +93,7 @@ std::ofstream& operator<<(std::ofstream& o, BankAccount& tem)
 		<< tem.MyName << " " 
 		<< tem.MyGender << " "
 		<< tem.MyTel << " " 
-		<< tem.MyDeposit <<" "
+		<< std::fixed << std::setprecision(2) << tem.MyDeposit <<" "
 		<<tem.NumDepositChange << " " 
 		<< tem.NumDepositInOut << 
 		std::endl;
