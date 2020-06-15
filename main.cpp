@@ -33,7 +33,7 @@ using DoubleLinkList = std::pair<LinkList, LinkList>;
 struct ListNode//双向链表
 {
 	//数据域
-	BankAccount date;
+	BankAccount data;
 	//指针域
 	LinkList prev = nullptr;//声明初始化
 	LinkList next = nullptr;
@@ -204,7 +204,8 @@ void DepositChangeBill(LinkList AccList, const std::string& InAccount);
 //主函数
 int main()
 {
-	
+
+	//system("COLOR 0A"); 不改了
 	DoubleLinkList AccList = CreateList();//创建链表
 	ReadFromFile1(AccList);//开始读文件
 	ReadFromFile2(AccList);
@@ -257,7 +258,7 @@ void ReadFromFile1(DoubleLinkList AccList)
 		p->prev->next = t;
 		p->prev = t;
 
-		in >> t->date;
+		in >> t->data;
 	}
 	in.close();//关闭
 }
@@ -274,11 +275,11 @@ void ReadFromFile2(DoubleLinkList AccList)
 
 	while (p->next != nullptr) {//依次读入
 
-		(p->date).DepositChangeData.resize((p->date).NumDepositChange);//设置vector的大小
-		for (int i = 0; i < (p->date).NumDepositChange; i++) {//依次读入每条转账记录
-			in >> (p->date).DepositChangeData[i].Money
-				>> (p->date).DepositChangeData[i].CurrentDeposit
-				>> (p->date).DepositChangeData[i].Time;
+		(p->data).DepositChangeData.resize((p->data).NumDepositChange);//设置vector的大小
+		for (int i = 0; i < (p->data).NumDepositChange; i++) {//依次读入每条转账记录
+			in >> (p->data).DepositChangeData[i].Money
+				>> (p->data).DepositChangeData[i].CurrentDeposit
+				>> (p->data).DepositChangeData[i].Time;
 		}
 		p = p->next;
 	}
@@ -296,12 +297,12 @@ void ReadFromFile3(DoubleLinkList AccList)
 	}
 
 	while (p->next != nullptr) {
-		(p->date).DepositInOutData.resize((p->date).NumDepositInOut);
-		for (int i = 0; i < (p->date).NumDepositInOut; i++) {
-			in >> (p->date).DepositInOutData[i].Money
-				>> (p->date).DepositInOutData[i].CurrentDeposit
-				>> (p->date).DepositInOutData[i].Time
-				>> (p->date).DepositInOutData[i].OtherAccount;
+		(p->data).DepositInOutData.resize((p->data).NumDepositInOut);
+		for (int i = 0; i < (p->data).NumDepositInOut; i++) {
+			in >> (p->data).DepositInOutData[i].Money
+				>> (p->data).DepositInOutData[i].CurrentDeposit
+				>> (p->data).DepositInOutData[i].Time
+				>> (p->data).DepositInOutData[i].OtherAccount;
 		}
 		p = p->next;
 	}
@@ -317,7 +318,7 @@ void SaveToFile1(LinkList AccList)
 	}
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		out << p->date;
+		out << p->data;
 		p = p->next;
 	}
 	out.close();
@@ -332,10 +333,10 @@ void SaveToFile2(LinkList AccList)
 		Exit(AccList);
 	}
 	while (p->next != nullptr) {
-		for (int i = 0; i < (p->date).NumDepositChange; i++) {//记得用空格和回车分开
-			out << std::fixed << std::setprecision(2) << (p->date).DepositChangeData[i].Money << " "
-				<< std::fixed << std::setprecision(2) << (p->date).DepositChangeData[i].CurrentDeposit << " "
-				<< (p->date).DepositChangeData[i].Time
+		for (int i = 0; i < (p->data).NumDepositChange; i++) {//记得用空格和回车分开
+			out << std::fixed << std::setprecision(2) << (p->data).DepositChangeData[i].Money << " "
+				<< std::fixed << std::setprecision(2) << (p->data).DepositChangeData[i].CurrentDeposit << " "
+				<< (p->data).DepositChangeData[i].Time
 				<< endl;
 		}
 		p = p->next;
@@ -354,11 +355,11 @@ void SaveToFile3(LinkList AccList)
 	}
 	while (p->next != nullptr) {
 
-		for (int i = 0; i < (p->date).NumDepositInOut; i++) {
-			out << std::fixed << std::setprecision(2) << (p->date).DepositInOutData[i].Money << " "
-				<< std::fixed << std::setprecision(2) << (p->date).DepositInOutData[i].CurrentDeposit << " "
-				<< (p->date).DepositInOutData[i].Time << " "
-				<< (p->date).DepositInOutData[i].OtherAccount
+		for (int i = 0; i < (p->data).NumDepositInOut; i++) {
+			out << std::fixed << std::setprecision(2) << (p->data).DepositInOutData[i].Money << " "
+				<< std::fixed << std::setprecision(2) << (p->data).DepositInOutData[i].CurrentDeposit << " "
+				<< (p->data).DepositInOutData[i].Time << " "
+				<< (p->data).DepositInOutData[i].OtherAccount
 				<< endl;
 		}
 		p = p->next;
@@ -456,7 +457,7 @@ void UserInterface(DoubleLinkList AccList)
 	}
 
 	//freopen("in.txt", "r", stdin);
-	
+
 	while (true) {//菜单界面
 		std::cout << "请选择相应的按钮,按回车键结束\n" << "[1] 查询余额\n" << "[2] 存款\n" << "[3] 取款\n" << "[4] 转账\n" << "[5] 修改密码\n" << "[6] 查询流水\n" << "[7] 退卡\n" << std::endl;
 		int n;
@@ -532,7 +533,7 @@ bool CheckAccount(LinkList AccList, const std::string& InAccount)
 {
 	LinkList Temp = AccList->next;
 	while (Temp->next != nullptr) {//未到达尾节点,线性查找
-		if ((Temp->date).GetMyAccount() == InAccount)//找到了此账号
+		if ((Temp->data).GetMyAccount() == InAccount)//找到了此账号
 			return true;
 		Temp = Temp->next;
 	}
@@ -542,7 +543,7 @@ bool CheckPassword(LinkList AccList, const std::string& InAccount, const std::st
 {
 	LinkList Temp = AccList->next;
 	while (Temp->next != nullptr) {//未到达尾节点,线性查找
-		if ((Temp->date).GetMyAccount() == InAccount && (Temp->date).GetMyPassword() == InPassword)//找到了此账号同时密码正确
+		if ((Temp->data).GetMyAccount() == InAccount && (Temp->data).GetMyPassword() == InPassword)//找到了此账号同时密码正确
 			return true;
 		Temp = Temp->next;
 	}
@@ -553,7 +554,7 @@ bool CheckAccountName(LinkList AccList, const std::string& InAccount, const std:
 {
 	LinkList Temp = AccList->next;
 	while (Temp->next != nullptr) {//未到达尾节点,线性查找
-		if ((Temp->date).GetMyAccount() == InAccount && (Temp->date).GetMyName() == InName)//找到了此账号同时密码正确
+		if ((Temp->data).GetMyAccount() == InAccount && (Temp->data).GetMyName() == InName)//找到了此账号同时密码正确
 			return true;
 		Temp = Temp->next;
 	}
@@ -564,7 +565,7 @@ void MapInitialization(LinkList AccList, std::map<std::string, int>& TemWrongPas
 {
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {//遍历
-		TemWrongPassword.insert(std::make_pair((p->date).GetMyAccount(), 0));//每次向map中插入pair<账号,0>
+		TemWrongPassword.insert(std::make_pair((p->data).GetMyAccount(), 0));//每次向map中插入pair<账号,0>
 		p = p->next;
 	}
 }
@@ -572,8 +573,8 @@ void QueryPrintDeposit(LinkList AccList, const std::string& InAccount)
 {
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if (InAccount == (p->date).GetMyAccount()) {
-			std::cout << "余额为 " << std::fixed << std::setprecision(2) << (p->date).GetMyDeposit() << std::endl;
+		if (InAccount == (p->data).GetMyAccount()) {
+			std::cout << "余额为 " << std::fixed << std::setprecision(2) << (p->data).GetMyDeposit() << std::endl;
 			break;
 		}
 		p = p->next;
@@ -601,16 +602,16 @@ void TakeInDeposit(LinkList AccList, const std::string& InAccount)
 
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if (InAccount == (p->date).GetMyAccount()) {
-			(p->date).ModifyDeposit(money);
+		if (InAccount == (p->data).GetMyAccount()) {
+			(p->data).ModifyDeposit(money);
 			//修改该账号存取款数据
-			(p->date).DepositChangeData.push_back(NumDepositChangeNode(money, (p->date).GetMyDeposit()));//vector添加数据
-			(p->date).NumDepositChange++;//流水项数加一
+			(p->data).DepositChangeData.push_back(NumDepositChangeNode(money, (p->data).GetMyDeposit()));//vector添加数据
+			(p->data).NumDepositChange++;//流水项数加一
 			SYSTEMTIME sys;//windowsAPI获取时间并将其转化为字符串格式
 			GetLocalTime(&sys);
 			char TemTime[100];
 			sprintf(TemTime, "%4d/%02d/%02d/%02d:%02d:%02d", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-			(p->date).DepositChangeData[(p->date).NumDepositChange - 1].Time = TemTime;
+			(p->data).DepositChangeData[(p->data).NumDepositChange - 1].Time = TemTime;
 			break;
 
 		}
@@ -665,7 +666,7 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 			else
 				break;
 		}
-		
+
 	}
 	else {
 		return;
@@ -675,20 +676,20 @@ void TakeOutDeposit(LinkList AccList, const std::string& InAccount)
 	money = (rand() % 15 + 1) * 100;*/
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if (InAccount == (p->date).GetMyAccount()) {
-			if ((p->date).GetMyDeposit() < money) {//判断钱够不够
+		if (InAccount == (p->data).GetMyAccount()) {
+			if ((p->data).GetMyDeposit() < money) {//判断钱够不够
 				cout << "余额不足" << endl;
 				return;
 			}
-			(p->date).ModifyDeposit(-money);
+			(p->data).ModifyDeposit(-money);
 			//继续修改存取款数据
-			(p->date).DepositChangeData.push_back(NumDepositChangeNode(-money, (p->date).GetMyDeposit()));
-			(p->date).NumDepositChange++;
+			(p->data).DepositChangeData.push_back(NumDepositChangeNode(-money, (p->data).GetMyDeposit()));
+			(p->data).NumDepositChange++;
 			SYSTEMTIME sys;//windowsAPI获取时间
 			GetLocalTime(&sys);
 			char TemTime[100];
 			sprintf(TemTime, "%4d/%02d/%02d/%02d:%02d:%02d", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-			(p->date).DepositChangeData[(p->date).NumDepositChange - 1].Time = TemTime;
+			(p->data).DepositChangeData[(p->data).NumDepositChange - 1].Time = TemTime;
 			break;
 		}
 		p = p->next;
@@ -778,21 +779,21 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {//先在自己账户扣款
-		if (InAccount == (p->date).GetMyAccount()) {
-			if ((p->date).GetMyDeposit() < money) {//判断存款够不够
+		if (InAccount == (p->data).GetMyAccount()) {
+			if ((p->data).GetMyDeposit() < money) {//判断存款够不够
 				cout << "余额不足" << endl;
 				return;
 			}
 			/*钱够*/
-			(p->date).ModifyDeposit(-money);
+			(p->data).ModifyDeposit(-money);
 
-			(p->date).DepositInOutData.push_back(NumDepositInOutNode(-money, (p->date).GetMyDeposit(), TurnOutAccount));//较存取款多一个参数,为的是记录转账的另一个账号
-			(p->date).NumDepositInOut++;
+			(p->data).DepositInOutData.push_back(NumDepositInOutNode(-money, (p->data).GetMyDeposit(), TurnOutAccount));//较存取款多一个参数,为的是记录转账的另一个账号
+			(p->data).NumDepositInOut++;
 			SYSTEMTIME sys;//windowsAPI获取时间
 			GetLocalTime(&sys);
 			char TemTime[100];
 			sprintf(TemTime, "%4d/%02d/%02d/%02d:%02d:%02d", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-			(p->date).DepositInOutData[(p->date).NumDepositInOut - 1].Time = TemTime;
+			(p->data).DepositInOutData[(p->data).NumDepositInOut - 1].Time = TemTime;
 
 			break;
 		}
@@ -802,16 +803,16 @@ void GiveOtherDeposit(LinkList AccList, const std::string& InAccount)
 
 	p = AccList->next;
 	while (p->next != nullptr) {
-		if (TurnOutAccount == (p->date).GetMyAccount()) {
-			(p->date).ModifyDeposit(money);
+		if (TurnOutAccount == (p->data).GetMyAccount()) {
+			(p->data).ModifyDeposit(money);
 
-			(p->date).DepositInOutData.push_back(NumDepositInOutNode(money, (p->date).GetMyDeposit(), InAccount));//收钱的对象也得有转账数据,加钱了
-			(p->date).NumDepositInOut++;
+			(p->data).DepositInOutData.push_back(NumDepositInOutNode(money, (p->data).GetMyDeposit(), InAccount));//收钱的对象也得有转账数据,加钱了
+			(p->data).NumDepositInOut++;
 			SYSTEMTIME sys;//windowsAPI获取时间
 			GetLocalTime(&sys);
 			char TemTime[100];
 			sprintf(TemTime, "%4d/%02d/%02d/%02d:%02d:%02d", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-			(p->date).DepositInOutData[(p->date).NumDepositInOut - 1].Time = TemTime;
+			(p->data).DepositInOutData[(p->data).NumDepositInOut - 1].Time = TemTime;
 
 			break;
 		}
@@ -926,8 +927,8 @@ void UserChangePassword(LinkList AccList, const std::string& InAccount)
 	if (SureNewPassword == NewPassword) {//二次判断成功后才可以改
 		LinkList p = AccList->next;
 		while (p->next != nullptr) {
-			if ((p->date).GetMyAccount() == InAccount) {
-				(p->date).SetPassword(NewPassword);
+			if ((p->data).GetMyAccount() == InAccount) {
+				(p->data).SetPassword(NewPassword);
 				cout << "密码修改成功" << endl;
 				return;
 			}
@@ -989,7 +990,7 @@ void AdministratorInterface(DoubleLinkList AccList)
 	//freopen("in.txt", "r", stdin);
 	int n;
 	while (true) {//管理员菜单界面
-		
+
 		cout << "[1] 创建用户账户\n"
 			<< "[2] 删除用户账户\n"
 			<< "[3] 查看全部用户信息\n"
@@ -1094,10 +1095,10 @@ void CreateUserAccount(DoubleLinkList AccList)//传入的是头尾指针
 {
 	cout << "请依次输入 账号 密码 姓名 性别(01表示) 手机号" << endl;
 	LinkList t = new ListNode;
-	cin >> t->date;
+	cin >> t->data;
 	system("cls");
 
-	if (CheckAccount(AccList.first, (t->date).GetMyAccount()) == true) {//先判断这账号是否已经存在
+	if (CheckAccount(AccList.first, (t->data).GetMyAccount()) == true) {//先判断这账号是否已经存在
 		cout << "该账号已存在,创建失败" << endl;
 		delete t;
 		return;
@@ -1127,7 +1128,7 @@ void DeleteUserAccount(LinkList AccList)
 	}
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyAccount() == TemAccount) {//找到位置后退出
+		if ((p->data).GetMyAccount() == TemAccount) {//找到位置后退出
 			break;
 		}
 		p = p->next;
@@ -1185,7 +1186,7 @@ void ShowAllUsersInformation(LinkList AccList)
 		cout << "无用户信息" << endl;
 	}
 	while (p->next != nullptr) {
-		cout << p->date;
+		cout << p->data;
 		p = p->next;
 	}
 
@@ -1196,8 +1197,8 @@ void UsersAccountDown(LinkList AccList)
 	LinkList j = nullptr;
 	for (i = AccList->next; i->next != nullptr; i = i->next) {
 		for (j = i->next; j->next != nullptr; j = j->next) {
-			if ((j->date).GetMyAccount() > (i->date).GetMyAccount()) {//没啥,六个函数都是这么写的
-				std::swap(i->date, j->date);
+			if ((j->data).GetMyAccount() > (i->data).GetMyAccount()) {//没啥,六个函数都是这么写的
+				std::swap(i->data, j->data);
 			}
 
 		}
@@ -1209,8 +1210,8 @@ void UsersAccountUp(LinkList AccList)
 	LinkList j = nullptr;
 	for (i = AccList->next; i->next != nullptr; i = i->next) {
 		for (j = i->next; j->next != nullptr; j = j->next) {
-			if ((j->date).GetMyAccount() < (i->date).GetMyAccount()) {
-				std::swap(i->date, j->date);
+			if ((j->data).GetMyAccount() < (i->data).GetMyAccount()) {
+				std::swap(i->data, j->data);
 			}
 
 		}
@@ -1222,8 +1223,8 @@ void UsersDepositDown(LinkList AccList)
 	LinkList j = nullptr;
 	for (i = AccList->next; i->next != nullptr; i = i->next) {
 		for (j = i->next; j->next != nullptr; j = j->next) {
-			if ((j->date).GetMyDeposit() > (i->date).GetMyDeposit()) {
-				std::swap(i->date, j->date);
+			if ((j->data).GetMyDeposit() > (i->data).GetMyDeposit()) {
+				std::swap(i->data, j->data);
 			}
 
 		}
@@ -1235,8 +1236,8 @@ void UsersDepositUp(LinkList AccList)
 	LinkList j = nullptr;
 	for (i = AccList->next; i->next != nullptr; i = i->next) {
 		for (j = i->next; j->next != nullptr; j = j->next) {
-			if ((j->date).GetMyDeposit() < (i->date).GetMyDeposit()) {
-				std::swap(i->date, j->date);
+			if ((j->data).GetMyDeposit() < (i->data).GetMyDeposit()) {
+				std::swap(i->data, j->data);
 			}
 
 		}
@@ -1251,10 +1252,10 @@ void UsersNameDown(LinkList AccList)
 			char* s1 = new char[30];//申请内存来存放姓名
 			char* s2 = new char[30];
 			//string的c_str方法返回的是个临时指针,这条语句执行后就会变成个野指针,所以得用strcpy来复制到确定的位置
-			strcpy(s1, (i->date).GetMyName().c_str());
-			strcpy(s2, (j->date).GetMyName().c_str());
-			if (zh_CN_collate.compare(s1, s1 + (i->date).GetMyName().size(), s2, s2 + (j->date).GetMyName().size()) < 0) {//这就涉及到我的知识盲区了,不过应该和strcmp差不多
-				std::swap(i->date, j->date);
+			strcpy(s1, (i->data).GetMyName().c_str());
+			strcpy(s2, (j->data).GetMyName().c_str());
+			if (zh_CN_collate.compare(s1, s1 + (i->data).GetMyName().size(), s2, s2 + (j->data).GetMyName().size()) < 0) {//这就涉及到我的知识盲区了,不过应该和strcmp差不多
+				std::swap(i->data, j->data);
 			}
 			delete[]s1;//释放内存!!!
 			delete[]s2;
@@ -1269,10 +1270,10 @@ void UsersNameUp(LinkList AccList)
 		for (j = i->next; j->next != nullptr; j = j->next) {
 			char* s1 = new char[30];
 			char* s2 = new char[30];
-			strcpy(s1, (i->date).GetMyName().c_str());
-			strcpy(s2, (j->date).GetMyName().c_str());
-			if (zh_CN_collate.compare(s1, s1 + (i->date).GetMyName().size(), s2, s2 + (j->date).GetMyName().size()) > 0) {
-				std::swap(i->date, j->date);
+			strcpy(s1, (i->data).GetMyName().c_str());
+			strcpy(s2, (j->data).GetMyName().c_str());
+			if (zh_CN_collate.compare(s1, s1 + (i->data).GetMyName().size(), s2, s2 + (j->data).GetMyName().size()) > 0) {
+				std::swap(i->data, j->data);
 			}
 			delete[]s1;
 			delete[]s2;
@@ -1304,8 +1305,8 @@ void FindUserInformation(LinkList AccList)
 
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyAccount() == TemAccount) {
-			cout << p->date;
+		if ((p->data).GetMyAccount() == TemAccount) {
+			cout << p->data;
 			break;
 		}
 		p = p->next;
@@ -1331,7 +1332,7 @@ void ChangeUserInformation(LinkList AccList)
 
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyAccount() == TemAccount) {//找到地址
+		if ((p->data).GetMyAccount() == TemAccount) {//找到地址
 			break;
 		}
 		p = p->next;
@@ -1350,12 +1351,12 @@ void ChangeUserInformation(LinkList AccList)
 		string TemPassword;
 		cin >> TemPassword;
 		system("cls");
-		if ((p->date).GetMyPassword() == TemPassword) {
+		if ((p->data).GetMyPassword() == TemPassword) {
 			cout << "新密码与原密码相同,修改失败" << endl;
 			return;
 		}
 
-		(p->date).SetPassword(TemPassword);
+		(p->data).SetPassword(TemPassword);
 		cout << "密码修改成功" << endl;
 
 	}
@@ -1367,12 +1368,12 @@ void ChangeUserInformation(LinkList AccList)
 		cin >> TemName;
 		system("cls");
 
-		if ((p->date).GetMyName() == TemName) {
+		if ((p->data).GetMyName() == TemName) {
 			cout << "新姓名与原姓名相同,修改失败" << endl;
 			return;
 		}
 
-		(p->date).SetName(TemName);
+		(p->data).SetName(TemName);
 		cout << "姓名修改成功" << endl;
 
 	}
@@ -1382,12 +1383,12 @@ void ChangeUserInformation(LinkList AccList)
 		cin >> TemTel;
 		system("cls");
 
-		if ((p->date).GetMyTel() == TemTel) {
+		if ((p->data).GetMyTel() == TemTel) {
 			cout << "新手机号与原手机号相同,修改失败" << endl;
 			return;
 		}
 
-		(p->date).SetTel(TemTel);
+		(p->data).SetTel(TemTel);
 		cout << "手机号修改成功" << endl;
 
 	}
@@ -1406,14 +1407,14 @@ void ChangeUserInformation(LinkList AccList)
 			return;
 		}
 		else {
-			(p->date).ModifyDeposit(t);
-			(p->date).DepositChangeData.push_back(NumDepositChangeNode(t, (p->date).GetMyDeposit()));
-			(p->date).NumDepositChange++;
+			(p->data).ModifyDeposit(t);
+			(p->data).DepositChangeData.push_back(NumDepositChangeNode(t, (p->data).GetMyDeposit()));
+			(p->data).NumDepositChange++;
 			SYSTEMTIME sys;//windowsAPI获取时间
 			GetLocalTime(&sys);
 			char TemTime[100];
 			sprintf(TemTime, "%4d/%02d/%02d/%02d:%02d:%02d", sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-			(p->date).DepositChangeData[(p->date).NumDepositChange - 1].Time = TemTime;
+			(p->data).DepositChangeData[(p->data).NumDepositChange - 1].Time = TemTime;
 
 			cout << "存款修改成功" << endl;
 		}
@@ -1462,7 +1463,7 @@ void GenderSearch(LinkList AccList)
 
 		LinkList p = AccList->next;
 		while (p->next != nullptr) {
-			if ((p->date).GetMyGender() == n) {
+			if ((p->data).GetMyGender() == n) {
 				if (IsFind == false) {//如果是第一次找到,输出属性栏
 					cout << std::left << std::setw(15) << "账号"
 						<< std::left << std::setw(15) << "密码"
@@ -1473,7 +1474,7 @@ void GenderSearch(LinkList AccList)
 						<< endl;
 				}
 
-				cout << p->date;
+				cout << p->data;
 				IsFind = true;//更新IsFind
 			}
 			p = p->next;
@@ -1498,7 +1499,7 @@ void NameSearch(LinkList AccList)
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyName() == TemName) {
+		if ((p->data).GetMyName() == TemName) {
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1508,7 +1509,7 @@ void NameSearch(LinkList AccList)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1527,7 +1528,7 @@ void TelSearch(LinkList AccList)
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyTel() == TemTel) {
+		if ((p->data).GetMyTel() == TemTel) {
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1537,7 +1538,7 @@ void TelSearch(LinkList AccList)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1573,7 +1574,7 @@ void SearchLowerThanDeposit(LinkList AccList, const double& AfferentDeposit) {
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyDeposit() < AfferentDeposit) {
+		if ((p->data).GetMyDeposit() < AfferentDeposit) {
 
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
@@ -1585,7 +1586,7 @@ void SearchLowerThanDeposit(LinkList AccList, const double& AfferentDeposit) {
 					<< endl;
 			}
 
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1600,7 +1601,7 @@ void SearchUpperThanDeposit(LinkList AccList, const double& AfferentDeposit)
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyDeposit() >= AfferentDeposit) {
+		if ((p->data).GetMyDeposit() >= AfferentDeposit) {
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1610,7 +1611,7 @@ void SearchUpperThanDeposit(LinkList AccList, const double& AfferentDeposit)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1668,7 +1669,7 @@ void SearchAsSurname(LinkList AccList)
 	while (p->next != nullptr) {
 
 		//string的find方法返回第一次找到那个子串的位置首字符的下标,如果没有找到,返回npos,这是一个常量,表示size_t的最大值4294967295,显然如果返回了下标0,代表姓氏匹配上了
-		if ((p->date).GetMyName().find(TemName) == 0) {
+		if ((p->data).GetMyName().find(TemName) == 0) {
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1678,7 +1679,7 @@ void SearchAsSurname(LinkList AccList)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1699,7 +1700,7 @@ void SearchAsKeyWord(LinkList AccList)
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyName().find(TemName) != string::npos) {//不等于npos代表找到了
+		if ((p->data).GetMyName().find(TemName) != string::npos) {//不等于npos代表找到了
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1709,7 +1710,7 @@ void SearchAsKeyWord(LinkList AccList)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1746,7 +1747,7 @@ void SearchAsTelTopThree(LinkList AccList)
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyTel() / 100000000 == RealTel) {//默认手机号是11位的,使用longlong存储
+		if ((p->data).GetMyTel() / 100000000 == RealTel) {//默认手机号是11位的,使用longlong存储
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1756,7 +1757,7 @@ void SearchAsTelTopThree(LinkList AccList)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1793,7 +1794,7 @@ void SearchAsTelLastFour(LinkList AccList)
 	bool IsFind = false;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyTel() % 10000 == RealTel) {//取得后四位
+		if ((p->data).GetMyTel() % 10000 == RealTel) {//取得后四位
 			if (IsFind == false) {
 				cout << std::left << std::setw(15) << "账号"
 					<< std::left << std::setw(15) << "密码"
@@ -1803,7 +1804,7 @@ void SearchAsTelLastFour(LinkList AccList)
 					<< std::left << std::setw(15) << "余额"
 					<< endl;
 			}
-			cout << p->date;
+			cout << p->data;
 			IsFind = true;
 		}
 		p = p->next;
@@ -1820,13 +1821,13 @@ void StatisticalInformation(LinkList AccList)
 	int Mr = 0, Mrs = 0;
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {//分别统计男性和女性人数,和总金钱
-		if ((p->date).GetMyGender() == 1) {
+		if ((p->data).GetMyGender() == 1) {
 			Mr++;
 		}
 		else {
 			Mrs++;
 		}
-		SumDeposit += (p->date).GetMyDeposit();
+		SumDeposit += (p->data).GetMyDeposit();
 		p = p->next;
 	}
 
@@ -1856,10 +1857,10 @@ void DepositInOutBill(LinkList AccList, const std::string& InAccount)
 {
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyAccount() == InAccount) {
+		if ((p->data).GetMyAccount() == InAccount) {
 
 			//这里的时间由于比较长,按25宽度格式化输出
-			if ((p->date).NumDepositChange == 0) {
+			if ((p->data).NumDepositChange == 0) {
 				cout << "无存取款流水信息" << endl;
 			}
 			else {
@@ -1871,10 +1872,10 @@ void DepositInOutBill(LinkList AccList, const std::string& InAccount)
 					<< std::left << std::setw(15) << "当前存款"
 					<< endl;
 				int MyCount = 0;
-				for (auto& ans : (p->date).DepositChangeData) {
+				for (auto& ans : (p->data).DepositChangeData) {
 					cout << std::left << std::setw(5) << ++MyCount
 						<< std::left << std::setw(15) << (ans.Money >= 0 ? "存款" : "取款")
-						<< std::left << std::setw(15) << (p->date).GetMyAccount()
+						<< std::left << std::setw(15) << (p->data).GetMyAccount()
 						<< std::left << std::setw(25) << ans.Time
 						<< std::left << std::setw(15) << std::showpos << std::fixed << std::setprecision(2) << ans.Money
 						<< std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
@@ -1892,12 +1893,12 @@ void DepositChangeBill(LinkList AccList, const std::string& InAccount)
 {
 	LinkList p = AccList->next;
 	while (p->next != nullptr) {
-		if ((p->date).GetMyAccount() == InAccount) {
-			if ((p->date).NumDepositInOut == 0) {
+		if ((p->data).GetMyAccount() == InAccount) {
+			if ((p->data).NumDepositInOut == 0) {
 				cout << "无转账流水信息" << endl;
 			}
 			else {
-				cout <<std::left<<std::setw(5)<<"序号"
+				cout << std::left << std::setw(5) << "序号"
 					<< std::left << std::setw(15) << "行为"
 					<< std::left << std::setw(15) << "转出账号"
 					<< std::left << std::setw(15) << "转入账号"
@@ -1906,11 +1907,11 @@ void DepositChangeBill(LinkList AccList, const std::string& InAccount)
 					<< std::left << std::setw(15) << "当前存款"
 					<< endl;
 				int MyCount = 0;
-				for (auto& ans : (p->date).DepositInOutData) {
+				for (auto& ans : (p->data).DepositInOutData) {
 					cout << std::left << std::setw(5) << ++MyCount
 						<< std::left << std::setw(15) << (ans.Money > 0 ? "转入" : "转出")
-						<< std::left << std::setw(15) << (ans.Money > 0 ? ans.OtherAccount : (p->date).GetMyAccount())
-						<< std::left << std::setw(15) << (ans.Money < 0 ? ans.OtherAccount : (p->date).GetMyAccount())
+						<< std::left << std::setw(15) << (ans.Money > 0 ? ans.OtherAccount : (p->data).GetMyAccount())
+						<< std::left << std::setw(15) << (ans.Money < 0 ? ans.OtherAccount : (p->data).GetMyAccount())
 						<< std::left << std::setw(25) << ans.Time
 						<< std::left << std::setw(15) << std::showpos << std::fixed << std::setprecision(2) << ans.Money
 						<< std::noshowpos << std::left << std::setw(15) << std::fixed << std::setprecision(2) << ans.CurrentDeposit << endl;
